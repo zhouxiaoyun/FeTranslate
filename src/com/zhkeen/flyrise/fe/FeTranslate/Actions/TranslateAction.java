@@ -32,7 +32,7 @@ public class TranslateAction extends EditorAction {
         int width = Constants.MARGIN * 4 + Constants.LABEL_WIDTH + Constants.TEXTAREA_WIDTH;
         int height = Constants.MARGIN * (langSize + 1) + Constants.LABEL_HEIGHT
             + Constants.TEXTAREA_HEIGHT * langSize;
-        resultDialog.setBounds(200, 200, width, height);
+        resultDialog.setBounds(0, 0, width, height);
         resultDialog.setVisible(true);
       });
     }

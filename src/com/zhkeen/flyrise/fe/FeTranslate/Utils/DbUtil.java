@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,11 +113,12 @@ public class DbUtil {
       throws SQLException {
     if (rs.next()) {
       TranslateResultModel model = new TranslateResultModel();
-      Map<String, String> map = new HashMap<>();
+      Map<String, String> map = new LinkedHashMap<>();
       model.setId(rs.getLong("ID"));
       for (String lang : supportLanguageMap.keySet()) {
         map.put(lang, rs.getString(lang));
       }
+      model.setTranslateMap(map);
       return model;
     } else {
       return null;
@@ -124,7 +126,12 @@ public class DbUtil {
   }
 
   private String getSearchField(Map<String, String> supportLanguageMap) {
-    return String.join(",", (String[]) supportLanguageMap.keySet().toArray());
+    String field = "";
+    for (String lang : supportLanguageMap.keySet()) {
+      field = field + lang + ",";
+    }
+    field = field.substring(0, field.length() - 1);
+    return field;
   }
 
 }

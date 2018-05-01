@@ -9,6 +9,7 @@ import com.zhkeen.flyrise.fe.FeTranslate.Utils.DbUtil;
 import com.zhkeen.flyrise.fe.FeTranslate.Utils.TranslatePluginManager;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -42,7 +43,7 @@ public class TranslateHandler extends EditorWriteActionHandler {
         if (model == null) {
           model = new TranslateResultModel();
           model.setId(new Date().getTime());
-          Map<String, String> translateMap = new HashMap<>();
+          Map<String, String> translateMap = new LinkedHashMap<>();
           for (String lang : manager.getSupportLanguageMap().keySet()) {
             if (lang.equals(manager.getDefaultLanguage())) {
               translateMap.put(lang, selectedText);

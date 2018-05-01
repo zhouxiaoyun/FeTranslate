@@ -15,7 +15,8 @@ public class TranslateComponent implements ProjectComponent {
 
   @Override
   public void initComponent() {
-
+    TranslatePluginManager manager = TranslatePluginManager.getInstance();
+    manager.inital(project.getBaseDir());
   }
 
   @Override
@@ -30,8 +31,6 @@ public class TranslateComponent implements ProjectComponent {
 
   @Override
   public void projectOpened() {
-    TranslatePluginManager manager = TranslatePluginManager.getInstance();
-    manager.inital(project.getBaseDir());
   }
 
   @Override

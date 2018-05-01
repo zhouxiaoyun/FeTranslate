@@ -6,6 +6,7 @@ import com.zhkeen.flyrise.fe.FeTranslate.Model.JdbcConnectionModel;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 import org.apache.commons.lang.StringUtils;
@@ -56,7 +57,7 @@ public class FileUtil {
       properties.load(propertiesFile.getInputStream());
       String supportLanguages = properties.getProperty("supportLanguages");
       if (StringUtils.isNotEmpty(supportLanguages)) {
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new LinkedHashMap<>();
         for (String lang : supportLanguages.split(",")) {
           if (Constants.ALL_LANGUAGE_MAP.containsKey(lang)) {
             map.put(lang, Constants.ALL_LANGUAGE_MAP.get(lang));
@@ -74,7 +75,7 @@ public class FileUtil {
   public static JdbcConnectionModel readJdbcConnectionModel(VirtualFile baseDir)
       throws IOException {
     VirtualFile propertiesFile = baseDir
-        .findFileByRelativePath(Constants.LANGUAGE_PROPERTIES_FILE);
+        .findFileByRelativePath(Constants.JDBC_PORPERTIES_FILE);
     if (propertiesFile.exists()) {
       Properties properties = new Properties();
       properties.load(propertiesFile.getInputStream());

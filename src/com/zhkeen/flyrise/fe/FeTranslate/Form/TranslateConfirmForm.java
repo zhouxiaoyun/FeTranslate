@@ -70,6 +70,7 @@ public class TranslateConfirmForm extends JDialog implements ActionListener {
             - Constants.BUTTON_WIDTH) / 2,
         Constants.MARGIN * (i + 1) + Constants.LABEL_HEIGHT + Constants.TEXTAREA_HEIGHT * (i
             - 1), Constants.BUTTON_WIDTH, Constants.BUTTON_HIGHT);
+    container.add(button);
     button.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
