@@ -1,0 +1,45 @@
+<idea-plugin>
+  <id>com.zhkeen.flyrise.fe.FeTranslate</id>
+  <name>FeTranslate</name>
+  <version>1.0</version>
+  <vendor email="support@zh-keen.com" url="http://github.com/FeTranslate">珠海敏锐信息技术有限公司</vendor>
+
+  <description><![CDATA[
+      本插件用于FE企业运营平台多语言翻译插件<br/>
+    ]]></description>
+
+  <change-notes><![CDATA[
+      1.0.0 第一个发布版本
+    ]]>
+  </change-notes>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="145.0"/>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  <depends>com.intellij.modules.lang</depends>
+  -->
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+
+    <action id="com.zhkeen.flyrise.fe.FeTranslate.Actions.TranslateAction" class="com.zhkeen.flyrise.fe.FeTranslate.Actions.TranslateAction" text="Translate"
+      description="本插件用于FE企业运营平台多语言翻译插件">
+      <add-to-group group-id="EditMenu" anchor="last"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="alt T" second-keystroke="ctrl alt T"/>
+    </action>
+  </actions>
+
+  <project-components>
+    <component>
+      <implementation-class>com.zhkeen.flyrise.fe.FeTranslate.ProjectComponent.TranslateComponent
+      </implementation-class>
+    </component>
+  </project-components>
+</idea-plugin>
