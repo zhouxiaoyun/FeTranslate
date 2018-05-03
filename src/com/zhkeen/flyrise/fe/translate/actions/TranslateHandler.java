@@ -8,7 +8,6 @@ import com.zhkeen.flyrise.fe.translate.model.TranslateResultModel;
 import com.zhkeen.flyrise.fe.translate.utils.DbUtil;
 import com.zhkeen.flyrise.fe.translate.utils.TransApi;
 import com.zhkeen.flyrise.fe.translate.utils.TranslatePluginManager;
-import com.zhkeen.flyrise.fe.translate.utils.ZHConverter;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -50,13 +49,7 @@ public class TranslateHandler extends EditorWriteActionHandler {
           model.setId(new Date().getTime() * 1000 + new Random().nextInt(1000));
           Map<String, String> translateMap = new LinkedHashMap<>();
           for (String lang : manager.getSupportLanguageMap().keySet()) {
-            if (lang.equals(manager.getDefaultLanguage())) {
-              translateMap.put(lang, selectedText);
-            } else if ("zh_TW".equals(lang)) {
-              translateMap.put(lang, ZHConverter.convert(selectedText, ZHConverter.TRADITIONAL));
-            } else {
-              translateMap.put(lang, transApi.getTransResult(selectedText, "auto", lang));
-            }
+            translateMap.put(lang, transApi.getTransResult(selectedText, "auto", lang));
           }
           model.setTranslateMap(translateMap);
         }
