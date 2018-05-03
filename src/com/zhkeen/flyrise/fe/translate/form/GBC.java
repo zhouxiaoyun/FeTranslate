@@ -1,4 +1,4 @@
-package com.zhkeen.flyrise.fe.FeTranslate.Form;
+package com.zhkeen.flyrise.fe.translate.form;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;

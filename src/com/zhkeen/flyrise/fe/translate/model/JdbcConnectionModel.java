@@ -1,4 +1,4 @@
-package com.zhkeen.flyrise.fe.FeTranslate.Model;
+package com.zhkeen.flyrise.fe.translate.model;
 
 public class JdbcConnectionModel {
 

@@ -1,4 +1,4 @@
-package com.zhkeen.flyrise.fe.FeTranslate.Actions;
+package com.zhkeen.flyrise.fe.translate.actions;
 
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
@@ -10,10 +10,8 @@ import com.intellij.openapi.ui.popup.Balloon;
 import com.intellij.openapi.ui.popup.BalloonBuilder;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.ui.awt.RelativePoint;
-import com.zhkeen.flyrise.fe.FeTranslate.Form.TranslateForm;
-import com.zhkeen.flyrise.fe.FeTranslate.Model.TranslateResultModel;
-import com.zhkeen.flyrise.fe.FeTranslate.Utils.Constants;
-import java.awt.Dimension;
+import com.zhkeen.flyrise.fe.translate.form.TranslateForm;
+import com.zhkeen.flyrise.fe.translate.model.TranslateResultModel;
 import java.awt.Point;
 
 public class TranslateAction extends EditorAction {

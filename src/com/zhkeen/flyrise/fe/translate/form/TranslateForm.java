@@ -1,10 +1,10 @@
-package com.zhkeen.flyrise.fe.FeTranslate.Form;
+package com.zhkeen.flyrise.fe.translate.form;
 
 import com.intellij.openapi.editor.Editor;
 import com.intellij.ui.components.JBScrollPane;
-import com.zhkeen.flyrise.fe.FeTranslate.Model.TranslateResultModel;
-import com.zhkeen.flyrise.fe.FeTranslate.Utils.Constants;
-import com.zhkeen.flyrise.fe.FeTranslate.Utils.TranslatePluginManager;
+import com.zhkeen.flyrise.fe.translate.model.TranslateResultModel;
+import com.zhkeen.flyrise.fe.translate.utils.Constants;
+import com.zhkeen.flyrise.fe.translate.utils.TranslatePluginManager;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;

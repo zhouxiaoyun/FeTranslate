@@ -1,7 +1,7 @@
-package com.zhkeen.flyrise.fe.FeTranslate.Utils;
+package com.zhkeen.flyrise.fe.translate.utils;
 
-import com.zhkeen.flyrise.fe.FeTranslate.Model.JdbcConnectionModel;
-import com.zhkeen.flyrise.fe.FeTranslate.Model.TranslateResultModel;
+import com.zhkeen.flyrise.fe.translate.model.JdbcConnectionModel;
+import com.zhkeen.flyrise.fe.translate.model.TranslateResultModel;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;

@@ -1,12 +1,12 @@
-package com.zhkeen.flyrise.fe.FeTranslate.Actions;
+package com.zhkeen.flyrise.fe.translate.actions;
 
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.actionSystem.EditorWriteActionHandler;
-import com.zhkeen.flyrise.fe.FeTranslate.Model.TranslateResultModel;
-import com.zhkeen.flyrise.fe.FeTranslate.Utils.DbUtil;
-import com.zhkeen.flyrise.fe.FeTranslate.Utils.TranslatePluginManager;
+import com.zhkeen.flyrise.fe.translate.model.TranslateResultModel;
+import com.zhkeen.flyrise.fe.translate.utils.DbUtil;
+import com.zhkeen.flyrise.fe.translate.utils.TranslatePluginManager;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;

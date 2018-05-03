@@ -1,4 +1,4 @@
-package com.zhkeen.flyrise.fe.FeTranslate.Utils;
+package com.zhkeen.flyrise.fe.translate.utils;
 
 import com.google.common.collect.ImmutableMap;
 import java.util.Map;

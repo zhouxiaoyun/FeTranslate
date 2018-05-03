@@ -1,5 +1,5 @@
 <idea-plugin>
-  <id>com.zhkeen.flyrise.fe.FeTranslate</id>
+  <id>com.zhkeen.flyrise.fe.translate</id>
   <name>FeTranslate</name>
   <version>1.0</version>
   <vendor email="support@zh-keen.com" url="http://github.com/FeTranslate">珠海敏锐信息技术有限公司</vendor>
@@ -29,7 +29,7 @@
   <actions>
     <!-- Add your actions here -->
 
-    <action id="com.zhkeen.flyrise.fe.FeTranslate.Actions.TranslateAction" class="com.zhkeen.flyrise.fe.FeTranslate.Actions.TranslateAction" text="Translate"
+    <action id="com.zhkeen.flyrise.fe.translate.actions.TranslateAction" class="com.zhkeen.flyrise.fe.translate.actions.TranslateAction" text="Translate"
       description="本插件用于FE企业运营平台多语言翻译插件">
       <add-to-group group-id="EditMenu" anchor="last"/>
       <keyboard-shortcut keymap="$default" first-keystroke="alt T" second-keystroke="ctrl alt T"/>
@@ -38,7 +38,7 @@
 
   <project-components>
     <component>
-      <implementation-class>com.zhkeen.flyrise.fe.FeTranslate.ProjectComponent.TranslateComponent
+      <implementation-class>com.zhkeen.flyrise.fe.translate.component.TranslateComponent
       </implementation-class>
     </component>
   </project-components>

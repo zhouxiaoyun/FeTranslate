@@ -1,8 +1,8 @@
-package com.zhkeen.flyrise.fe.FeTranslate.ProjectComponent;
+package com.zhkeen.flyrise.fe.translate.component;
 
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
-import com.zhkeen.flyrise.fe.FeTranslate.Utils.TranslatePluginManager;
+import com.zhkeen.flyrise.fe.translate.utils.TranslatePluginManager;
 import org.jetbrains.annotations.NotNull;
 
 public class TranslateComponent implements ProjectComponent {
@@ -26,7 +26,7 @@ public class TranslateComponent implements ProjectComponent {
   @Override
   @NotNull
   public String getComponentName() {
-    return "com.zhkeen.flyrise.fe.FeTranslate.ProjectComponent.TranslateComponent";
+    return "com.zhkeen.flyrise.fe.translate.component.TranslateComponent";
   }
 
   @Override

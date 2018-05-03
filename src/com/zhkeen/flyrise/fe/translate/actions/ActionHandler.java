@@ -1,7 +1,7 @@
-package com.zhkeen.flyrise.fe.FeTranslate.Actions;
+package com.zhkeen.flyrise.fe.translate.actions;
 
 import com.intellij.openapi.editor.Editor;
-import com.zhkeen.flyrise.fe.FeTranslate.Model.TranslateResultModel;
+import com.zhkeen.flyrise.fe.translate.model.TranslateResultModel;
 
 public interface ActionHandler {
 

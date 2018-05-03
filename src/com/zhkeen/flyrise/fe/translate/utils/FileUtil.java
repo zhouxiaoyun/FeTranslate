@@ -1,8 +1,8 @@
-package com.zhkeen.flyrise.fe.FeTranslate.Utils;
+package com.zhkeen.flyrise.fe.translate.utils;
 
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.zhkeen.flyrise.fe.FeTranslate.Model.JdbcConnectionModel;
+import com.zhkeen.flyrise.fe.translate.model.JdbcConnectionModel;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedHashMap;
