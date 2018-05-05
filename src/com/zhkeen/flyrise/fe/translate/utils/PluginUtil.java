@@ -6,27 +6,16 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TranslatePluginManager {
+public class PluginUtil {
 
-  private final Logger logger = LoggerFactory.getLogger(TranslatePluginManager.class);
+  private final Logger logger = LoggerFactory.getLogger(PluginUtil.class);
 
-  private static TranslatePluginManager instance;
   private boolean needMultiLanguage = false;
   private String defaultLanguage;
   private Map<String, String> supportLanguageMap;
   private DbUtil dbUtil;
 
-  private TranslatePluginManager() {
-  }
-
-  public static TranslatePluginManager getInstance() {
-    if (instance == null) {
-      instance = new TranslatePluginManager();
-    }
-    return instance;
-  }
-
-  public void inital(VirtualFile baseDir) {
+  public PluginUtil(VirtualFile baseDir) {
     try {
       if (FileUtil.existsFeProjectFile(baseDir) && FileUtil.existsMultiLanguageFile(baseDir)) {
         needMultiLanguage = true;

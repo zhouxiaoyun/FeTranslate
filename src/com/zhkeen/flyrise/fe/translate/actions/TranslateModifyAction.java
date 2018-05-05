@@ -12,22 +12,28 @@ import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.ui.awt.RelativePoint;
 import com.zhkeen.flyrise.fe.translate.form.TranslateForm;
 import com.zhkeen.flyrise.fe.translate.model.TranslateResultModel;
+import com.zhkeen.flyrise.fe.translate.utils.PluginUtil;
 import java.awt.Point;
 
-public class TranslateAction extends EditorAction {
+public class TranslateModifyAction extends EditorAction {
 
-  public TranslateAction() {
+  private static final String JAVA_FORMART = "transUtil.get(%d)";
+  private static final String JS_FORMART = "transUtil.%d";
+  private static final String HTML_FORMART = "transUtil.%d";
+
+  public TranslateModifyAction() {
     super(new TranslateHandler(new PopupActionHandler()));
   }
 
   private static class PopupActionHandler implements ActionHandler {
 
     @Override
-    public void handleResult(Editor editor, TranslateResultModel model) {
+    public void handleResult(Editor editor, PluginUtil pluginUtil, TranslateResultModel model,
+        String fileType) {
       Application app = ApplicationManager.getApplication();
       app.invokeLater(() -> {
-        TranslateForm resultDialog = new TranslateForm(editor, model);
-        resultDialog.setVisible(true);
+        TranslateForm translateForm = new TranslateForm(editor, pluginUtil, model, fileType);
+        translateForm.setVisible(true);
       });
     }
 

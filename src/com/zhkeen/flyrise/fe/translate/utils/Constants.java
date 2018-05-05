@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class Constants {
 
@@ -14,6 +15,7 @@ public class Constants {
   public static final String JDBC_PORPERTIES_FILE = "src/main/resources/jdbc.properties";
   public static final String LANGUAGE_PROPERTIES_FILE = "src/main/resources/language.properties";
 
+  public static final Pattern PATTERN_TRANSLATE = Pattern.compile("[0-9]{16}");
   public static Map<String, String> ALL_LANGUAGE_MAP = getAllLanguageMap();
 
   private static Map<String, String> getAllLanguageMap(){
