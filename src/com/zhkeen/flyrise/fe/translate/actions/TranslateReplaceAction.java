@@ -68,8 +68,15 @@ public class TranslateReplaceAction extends EditorAction {
       @Override
       public void handleError(Editor editor, String errMessage) {
         Application app = ApplicationManager.getApplication();
-        app.invokeLater(() -> {
-//          showErrorBallon(editor, errMessage);
+        app.invokeLater(() -> {BalloonBuilder builder =
+            JBPopupFactory.getInstance()
+                .createHtmlTextBalloonBuilder("FE企业运营管理平台", MessageType.ERROR, null);
+          Balloon balloon = builder.createBalloon();
+          balloon.setTitle(errMessage);
+          CaretModel caretModel = editor.getCaretModel();
+          Point point = editor.visualPositionToXY(caretModel.getVisualPosition());
+          RelativePoint where = new RelativePoint(point);
+          balloon.show(where, Balloon.Position.below);
         });
       }
     }));
@@ -85,15 +92,4 @@ public class TranslateReplaceAction extends EditorAction {
     }
   }
 
-  public void showErrorBallon(Editor editor, String message) {
-    BalloonBuilder builder =
-        JBPopupFactory.getInstance()
-            .createHtmlTextBalloonBuilder("FE企业运营管理平台", MessageType.ERROR, null);
-    Balloon balloon = builder.createBalloon();
-    balloon.setTitle(message);
-    CaretModel caretModel = editor.getCaretModel();
-    Point point = editor.visualPositionToXY(caretModel.getVisualPosition());
-    RelativePoint where = new RelativePoint(point);
-    balloon.show(where, Balloon.Position.below);
-  }
 }

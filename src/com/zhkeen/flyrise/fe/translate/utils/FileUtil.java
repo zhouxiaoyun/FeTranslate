@@ -30,7 +30,8 @@ public class FileUtil {
     }
   }
 
-  public static String readDefaultLanguage(VirtualFile baseDir) throws IOException {
+  public static String readDefaultLanguage(VirtualFile baseDir)
+      throws IOException, ConfigurationException {
     VirtualFile propertiesFile = baseDir
         .findFileByRelativePath(Constants.LANGUAGE_PROPERTIES_FILE);
     if (propertiesFile.exists()) {
@@ -40,7 +41,7 @@ public class FileUtil {
       if (StringUtils.isNotEmpty(defaultLanguage)) {
         return defaultLanguage;
       } else {
-        throw new FileNotFoundException("多语言配置文件错误！");
+        throw new ConfigurationException("多语言配置文件错误！");
       }
     } else {
       throw new FileNotFoundException("没有找到多语言的配置文件！");
@@ -48,7 +49,7 @@ public class FileUtil {
   }
 
   public static Map<String, String> readSupportLanguage(VirtualFile baseDir)
-      throws IOException {
+      throws IOException, ConfigurationException {
     VirtualFile propertiesFile = baseDir
         .findFileByRelativePath(Constants.LANGUAGE_PROPERTIES_FILE);
     if (propertiesFile.exists()) {
@@ -64,7 +65,7 @@ public class FileUtil {
         }
         return map;
       } else {
-        throw new FileNotFoundException("多语言配置文件错误！");
+        throw new ConfigurationException("多语言配置文件错误！");
       }
     } else {
       throw new FileNotFoundException("没有找到多语言的配置文件！");
@@ -72,7 +73,7 @@ public class FileUtil {
   }
 
   public static JdbcConnectionModel readJdbcConnectionModel(VirtualFile baseDir)
-      throws IOException {
+      throws IOException, ConfigurationException {
     VirtualFile propertiesFile = baseDir
         .findFileByRelativePath(Constants.JDBC_PORPERTIES_FILE);
     if (propertiesFile.exists()) {
@@ -80,19 +81,24 @@ public class FileUtil {
       properties.load(propertiesFile.getInputStream());
 
       String driverName = properties.getProperty("mssql.jdbc.driver");
-      String dbURL = properties.getProperty("mssql.jdbc.url");
-      String userName = properties.getProperty("mssql.jdbc.user");
-      String userPwd = properties.getProperty("mssql.jdbc.password");
+      String jdbcUrl = properties.getProperty("mssql.jdbc.url");
+      String jdbcUser = properties.getProperty("mssql.jdbc.user");
+      String jdbcPassword = properties.getProperty("mssql.jdbc.password");
 
-      JdbcConnectionModel model = new JdbcConnectionModel();
-      model.setDriverName(driverName);
-      model.setJdbcUrl(dbURL);
-      model.setJdbcUser(userName);
-      model.setJdbcPassword(userPwd);
+      if (StringUtils.isNotEmpty(driverName) && StringUtils.isNotEmpty(jdbcUrl) && StringUtils
+          .isNotEmpty(jdbcUser) && StringUtils.isNotEmpty(jdbcPassword)) {
+        JdbcConnectionModel model = new JdbcConnectionModel();
+        model.setDriverName(driverName);
+        model.setJdbcUrl(jdbcUrl);
+        model.setJdbcUser(jdbcUser);
+        model.setJdbcPassword(jdbcPassword);
 
-      return model;
+        return model;
+      }else {
+        throw new ConfigurationException("数据库配置文件错误！");
+      }
     } else {
-      throw new FileNotFoundException("没有找到数据库的配置文件！");
+      throw new FileNotFoundException("没有找到数据库配置文件！");
     }
   }
 
