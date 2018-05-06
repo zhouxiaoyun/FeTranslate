@@ -37,9 +37,6 @@
       <interface-class>com.zhkeen.flyrise.fe.translate.configuration.PersistingService
       </interface-class>
     </component>
-  </application-components>
-
-  <project-components>
     <component>
       <interface-class>com.zhkeen.flyrise.fe.translate.configuration.ConfigurationComponent
       </interface-class>
@@ -47,7 +44,8 @@
       </implementation-class>
       <option value="true" name="workspace"/>
     </component>
-  </project-components>
+  </application-components>
+
 
   <actions>
     <action id="com.zhkeen.flyrise.fe.translate.actions.TranslateReplaceAction"

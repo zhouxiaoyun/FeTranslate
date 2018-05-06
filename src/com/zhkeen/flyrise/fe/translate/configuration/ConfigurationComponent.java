@@ -1,6 +1,6 @@
 package com.zhkeen.flyrise.fe.translate.configuration;
 
-import com.intellij.openapi.components.ProjectComponent;
+import com.intellij.openapi.components.ApplicationComponent;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.projectImport.ProjectImportBuilder;
@@ -9,7 +9,7 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import org.jetbrains.annotations.NotNull;
 
-public final class ConfigurationComponent implements ProjectComponent, Configurable {
+public final class ConfigurationComponent implements ApplicationComponent, Configurable {
 	public static final String COMPONENT_NAME = "FeTranslate.ConfigurationComponent";
 
 	public static final String CONFIGURATION_LOCATION;
@@ -24,14 +24,6 @@ public final class ConfigurationComponent implements ProjectComponent, Configura
 	@Override
 	public boolean isModified() {
 		return form != null && form.isModified(getState());
-	}
-
-	@Override
-	public void projectOpened() {
-	}
-
-	@Override
-	public void projectClosed() {
 	}
 
 	private ConfigurationState getState() {
