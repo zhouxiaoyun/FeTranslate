@@ -33,7 +33,7 @@ public class TranslateHandler extends EditorWriteActionHandler {
     if (editor == null) {
       return;
     }
-    String selectedText = editor.getSelectionModel().getSelectedText();
+    String selectedText = trimText(editor.getSelectionModel().getSelectedText());
     if (selectedText != null && selectedText.length() > 0) {
       pluginUtil = new PluginUtil(editor.getProject().getBaseDir());
       if (pluginUtil.isNeedMultiLanguage()) {
@@ -74,6 +74,17 @@ public class TranslateHandler extends EditorWriteActionHandler {
         }
       }
     }
+  }
 
+  private String trimText(String text) {
+    int len = text.length();
+    int st = 0;
+    if (text.startsWith("'") || text.startsWith("\"")) {
+      st = 1;
+    }
+    if (text.endsWith("'") || text.endsWith("\"")) {
+      len = len - 1;
+    }
+    return ((st > 0) || (len < text.length())) ? text.substring(st, len) : text;
   }
 }
