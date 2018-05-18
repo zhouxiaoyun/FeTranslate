@@ -24,9 +24,10 @@ import java.util.regex.Matcher;
 
 public class TranslateReplaceAction extends EditorAction {
 
-  private static final String JAVA_FORMART = "transUtil.get(%d)";
-  private static final String JS_FORMART = "transUtil.%d";
-  private static final String HTML_FORMART = "transUtil.%d";
+  private static final String JAVA_FORMART = "translateUtil.get(%d)";
+  private static final String JSP_FORMART = "<%=translateUtil.get(%d)%>";
+  private static final String JS_FORMART = "translateUtil.%d";
+  private static final String HTML_FORMART = "translateUtil.%d";
 
   public TranslateReplaceAction() {
     super(new TranslateHandler(new ActionHandler() {
@@ -44,6 +45,9 @@ public class TranslateReplaceAction extends EditorAction {
             switch (fileType) {
               case ".java":
                 newText = String.format(JAVA_FORMART, model.getId());
+                break;
+              case ".jsp":
+                newText = String.format(JSP_FORMART, model.getId());
                 break;
               case ".js":
                 newText = String.format(JS_FORMART, model.getId());

@@ -17,10 +17,6 @@ import java.awt.Point;
 
 public class TranslateModifyAction extends EditorAction {
 
-  private static final String JAVA_FORMART = "transUtil.get(%d)";
-  private static final String JS_FORMART = "transUtil.%d";
-  private static final String HTML_FORMART = "transUtil.%d";
-
   public TranslateModifyAction() {
     super(new TranslateHandler(new PopupActionHandler()));
   }

@@ -17,13 +17,13 @@ public class PluginUtil {
 
   public PluginUtil(VirtualFile baseDir) {
     try {
-      if (FileUtil.existsFeProjectFile(baseDir) && FileUtil.existsMultiLanguageFile(baseDir)) {
+      if (FileUtil.existsFeProjectFile(baseDir)) {
         needMultiLanguage = true;
       } else {
         needMultiLanguage = false;
       }
-      this.defaultLanguage = FileUtil.readDefaultLanguage(baseDir);
-      this.supportLanguageMap = FileUtil.readSupportLanguage(baseDir);
+      this.defaultLanguage = "ZH";
+      this.supportLanguageMap = Constants.ALL_LANGUAGE_MAP;
       JdbcConnectionModel jdbcConnectionModel = FileUtil.readJdbcConnectionModel(baseDir);
       this.dbUtil = new DbUtil(jdbcConnectionModel);
     } catch (Exception e) {

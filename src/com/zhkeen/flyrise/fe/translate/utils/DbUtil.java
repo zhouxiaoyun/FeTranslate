@@ -34,7 +34,8 @@ public class DbUtil {
       Map<String, String> supportLanguageMap) throws SQLException, ClassNotFoundException {
     String langFields = getSearchField(supportLanguageMap);
     String selectSql = String
-        .format("SELECT ID, %s FROM %s WHERE %s = ?", langFields, TABLE_TRANSLATE, defaultLanguage);
+        .format("SELECT ID, ISJS, %s FROM %s WHERE %s = ?", langFields, TABLE_TRANSLATE,
+            defaultLanguage);
     logger.debug(selectSql);
     Connection connection = getConnection();
     PreparedStatement pstmt = connection.prepareStatement(selectSql);
@@ -45,15 +46,15 @@ public class DbUtil {
     return model;
   }
 
-  public TranslateResultModel findById(long id,
+  public TranslateResultModel findById(String id,
       Map<String, String> supportLanguageMap) throws SQLException, ClassNotFoundException {
     String langFields = getSearchField(supportLanguageMap);
     String selectSql = String
-        .format("SELECT ID, %s FROM %s WHERE ID = ?", langFields, TABLE_TRANSLATE);
+        .format("SELECT ID, ISJS, %s FROM %s WHERE ID = ?", langFields, TABLE_TRANSLATE);
     logger.debug(selectSql);
     Connection connection = getConnection();
     PreparedStatement pstmt = connection.prepareStatement(selectSql);
-    pstmt.setLong(1, id);
+    pstmt.setString(1, id);
     ResultSet rs = pstmt.executeQuery();
     TranslateResultModel model = buildResultModel(rs, supportLanguageMap);
     connection.close();
@@ -65,31 +66,30 @@ public class DbUtil {
         .format("SELECT ID FROM %s WHERE ID = ?", TABLE_TRANSLATE);
     Connection connection = getConnection();
     PreparedStatement pstmt = connection.prepareStatement(selectSql);
-    pstmt.setLong(1, model.getId());
+    pstmt.setString(1, model.getId());
     ResultSet rs = pstmt.executeQuery();
 
     if (rs.next()) {
-      String updateSql = "UPDATE " + TABLE_TRANSLATE + " SET ";
+      String updateSql = "UPDATE " + TABLE_TRANSLATE + " SET ISJS = ?, ";
       for (String lang : model.getTranslateMap().keySet()) {
-        updateSql = updateSql + " "+ lang + " = ?,";
+        updateSql = updateSql + " " + lang + " = ?,";
       }
-      if (updateSql.endsWith(",")) {
-        updateSql = updateSql.substring(0, updateSql.length() - 1);
-      }
-      updateSql = updateSql + " WHERE ID = ?";
+      updateSql = updateSql + " LASTUPDATE = ? WHERE ID = ?";
       logger.debug(updateSql);
       PreparedStatement psUpdate = connection.prepareStatement(updateSql);
-      int i = 1;
+      psUpdate.setString(1, model.getIsJs());
+      int i = 2;
       for (String lang : model.getTranslateMap().keySet()) {
         psUpdate.setString(i, model.getTranslateMap().get(lang));
         i++;
       }
-      psUpdate.setLong(i, model.getId());
+      psUpdate.setDate(i, model.getLastUpdate());
+      psUpdate.setString(i + 1, model.getId());
       psUpdate.executeUpdate();
     } else {
       String insertSql =
-          "INSERT INTO " + TABLE_TRANSLATE + "(ID, " + getSearchField(model.getTranslateMap())
-              + ") VALUES(";
+          "INSERT INTO " + TABLE_TRANSLATE + "(ID, ISJS, " + getSearchField(model.getTranslateMap())
+              + ") VALUES(?,?,";
       int j = model.getTranslateMap().size();
       for (int i = 0; i < j; i++) {
         insertSql = insertSql + "?,";
@@ -97,12 +97,14 @@ public class DbUtil {
       insertSql = insertSql + "?)";
       logger.debug(insertSql);
       PreparedStatement psInsert = connection.prepareStatement(insertSql);
-      psInsert.setLong(1, model.getId());
-      int m = 2;
+      psInsert.setString(1, model.getId());
+      psInsert.setString(2, model.getIsJs());
+      int m = 3;
       for (String lang : model.getTranslateMap().keySet()) {
         psInsert.setString(m, model.getTranslateMap().get(lang));
         m++;
       }
+      psInsert.setDate(m, model.getLastUpdate());
       psInsert.execute();
     }
   }
@@ -113,10 +115,12 @@ public class DbUtil {
     if (rs.next()) {
       TranslateResultModel model = new TranslateResultModel();
       Map<String, String> map = new LinkedHashMap<>();
-      model.setId(rs.getLong("ID"));
+      model.setId(rs.getString("ID"));
+      model.setIsJs(rs.getString("ISJS"));
       for (String lang : supportLanguageMap.keySet()) {
         map.put(lang, rs.getString(lang));
       }
+      model.setLastUpdate(rs.getDate("LASTUPDATE"));
       model.setTranslateMap(map);
       return model;
     } else {

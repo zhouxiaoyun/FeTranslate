@@ -13,6 +13,7 @@ import com.zhkeen.flyrise.fe.translate.utils.DbUtil;
 import com.zhkeen.flyrise.fe.translate.utils.LanguageIdUtil;
 import com.zhkeen.flyrise.fe.translate.utils.PluginUtil;
 import com.zhkeen.flyrise.fe.translate.utils.TransApi;
+import java.sql.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -40,13 +41,16 @@ public class TranslateHandler extends EditorWriteActionHandler {
         try {
           DbUtil dbUtil = pluginUtil.getDbUtil();
           String fileName = dataContext.getData(CommonDataKeys.PSI_FILE).toString().toLowerCase();
-          String fileType = fileName.substring(fileName.lastIndexOf('.'));
-
+          String fileType = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
+          String isJs = "0";
+          if (".js".equals(fileType)) {
+            isJs = "1";
+          }
           TranslateResultModel model;
           Matcher m = Constants.PATTERN_TRANSLATE.matcher(selectedText);
           if (m.find()) {
             model = dbUtil
-                .findById(Long.parseLong(m.group()), pluginUtil.getSupportLanguageMap());
+                .findById(m.group(), pluginUtil.getSupportLanguageMap());
           } else {
             model = dbUtil
                 .findByMessage(pluginUtil.getDefaultLanguage(), selectedText,
@@ -58,15 +62,20 @@ public class TranslateHandler extends EditorWriteActionHandler {
             TransApi transApi = new TransApi(state.getAppId(), state.getSecretKey());
             model = new TranslateResultModel();
             model.setId(LanguageIdUtil.generateId());
+            model.setIsJs(isJs);
             Map<String, String> translateMap = new LinkedHashMap<>();
             for (String lang : pluginUtil.getSupportLanguageMap().keySet()) {
-              if ("zh".equals(lang)) {
+              if ("ZH".equals(lang)) {
                 translateMap.put(lang, selectedText);
               } else {
-                translateMap.put(lang, transApi.getTransResult(selectedText, "auto", lang));
+                translateMap
+                    .put(lang, transApi.getTransResult(selectedText, "auto", lang.toLowerCase()));
               }
             }
+            model.setLastUpdate(new Date(new java.util.Date().getTime()));
             model.setTranslateMap(translateMap);
+          } else {
+            model.setIsJs(isJs);
           }
           mHandler.handleResult(editor, pluginUtil, model, fileType);
         } catch (Exception e) {
