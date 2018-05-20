@@ -34,7 +34,7 @@ public class DbUtil {
       Map<String, String> supportLanguageMap) throws SQLException, ClassNotFoundException {
     String langFields = getSearchField(supportLanguageMap);
     String selectSql = String
-        .format("SELECT ID, ISJS, %s FROM %s WHERE %s = ?", langFields, TABLE_TRANSLATE,
+        .format("SELECT ID, ISJS, %s, LASTUPDATE FROM %s WHERE %s = ?", langFields, TABLE_TRANSLATE,
             defaultLanguage);
     logger.debug(selectSql);
     Connection connection = getConnection();
@@ -50,7 +50,7 @@ public class DbUtil {
       Map<String, String> supportLanguageMap) throws SQLException, ClassNotFoundException {
     String langFields = getSearchField(supportLanguageMap);
     String selectSql = String
-        .format("SELECT ID, ISJS, %s FROM %s WHERE ID = ?", langFields, TABLE_TRANSLATE);
+        .format("SELECT ID, ISJS, %s, LASTUPDATE FROM %s WHERE ID = ?", langFields, TABLE_TRANSLATE);
     logger.debug(selectSql);
     Connection connection = getConnection();
     PreparedStatement pstmt = connection.prepareStatement(selectSql);
@@ -89,7 +89,7 @@ public class DbUtil {
     } else {
       String insertSql =
           "INSERT INTO " + TABLE_TRANSLATE + "(ID, ISJS, " + getSearchField(model.getTranslateMap())
-              + ") VALUES(?,?,";
+              + ", LASTUPDATE) VALUES(?,?,";
       int j = model.getTranslateMap().size();
       for (int i = 0; i < j; i++) {
         insertSql = insertSql + "?,";
@@ -107,6 +107,7 @@ public class DbUtil {
       psInsert.setDate(m, model.getLastUpdate());
       psInsert.execute();
     }
+    connection.close();
   }
 
   private TranslateResultModel buildResultModel(ResultSet rs,

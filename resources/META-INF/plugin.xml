@@ -52,13 +52,13 @@
       class="com.zhkeen.flyrise.fe.translate.actions.TranslateReplaceAction" text="Translate"
       description="翻译">
       <add-to-group group-id="EditMenu" anchor="last"/>
-      <keyboard-shortcut keymap="$default" first-keystroke="alt T"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="ctrl F1"/>
     </action>
     <action id="com.zhkeen.flyrise.fe.translate.actions.TranslateModifyAction"
       class="com.zhkeen.flyrise.fe.translate.actions.TranslateModifyAction" text="View Translate"
       description="查看翻译结果并修改">
       <add-to-group group-id="EditMenu" anchor="last"/>
-      <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt T"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="ctrl F2"/>
     </action>
   </actions>
 

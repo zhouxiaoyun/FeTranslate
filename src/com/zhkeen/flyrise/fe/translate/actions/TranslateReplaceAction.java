@@ -1,5 +1,10 @@
 package com.zhkeen.flyrise.fe.translate.actions;
 
+import static com.zhkeen.flyrise.fe.translate.utils.Constants.HTML_FORMART;
+import static com.zhkeen.flyrise.fe.translate.utils.Constants.JAVA_FORMART;
+import static com.zhkeen.flyrise.fe.translate.utils.Constants.JSP_FORMART;
+import static com.zhkeen.flyrise.fe.translate.utils.Constants.JS_FORMART;
+
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.Presentation;
@@ -23,11 +28,6 @@ import java.sql.SQLException;
 import java.util.regex.Matcher;
 
 public class TranslateReplaceAction extends EditorAction {
-
-  private static final String JAVA_FORMART = "translateUtil.get(%d)";
-  private static final String JSP_FORMART = "<%=translateUtil.get(%d)%>";
-  private static final String JS_FORMART = "translateUtil.%d";
-  private static final String HTML_FORMART = "translateUtil.%d";
 
   public TranslateReplaceAction() {
     super(new TranslateHandler(new ActionHandler() {
@@ -86,14 +86,14 @@ public class TranslateReplaceAction extends EditorAction {
     }));
   }
 
-  @Override
-  public void update(Editor editor, Presentation presentation, DataContext dataContext) {
-    String fileName = dataContext.getData(CommonDataKeys.PSI_FILE).toString().toLowerCase();
-    if (fileName.endsWith(".java") || fileName.endsWith(".html") || fileName.endsWith(".js")) {
-      super.update(editor, presentation, dataContext);
-    } else {
-      presentation.setVisible(false);
-    }
-  }
+//  @Override
+//  public void update(Editor editor, Presentation presentation, DataContext dataContext) {
+//    String fileName = dataContext.getData(CommonDataKeys.PSI_FILE).toString().toLowerCase();
+//    if (fileName.endsWith(".java") || fileName.endsWith(".html") || fileName.endsWith(".js")) {
+//      super.update(editor, presentation, dataContext);
+//    } else {
+//      presentation.setVisible(false);
+//    }
+//  }
 
 }
