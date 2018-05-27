@@ -40,7 +40,7 @@ public class TranslateHandler extends EditorWriteActionHandler {
       if (pluginUtil.isNeedMultiLanguage()) {
         try {
           DbUtil dbUtil = pluginUtil.getDbUtil();
-          String fileName = dataContext.getData(CommonDataKeys.PSI_FILE).toString().toLowerCase();
+          String fileName = dataContext.getData(CommonDataKeys.PSI_FILE).toString();
           String fileType = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
           String isJs = "0";
           if (".js".equals(fileType)) {
@@ -62,7 +62,7 @@ public class TranslateHandler extends EditorWriteActionHandler {
             TransApi transApi = new TransApi(state.getAppId(), state.getSecretKey());
             model = new TranslateResultModel();
             model.setId(LanguageIdUtil.generateId());
-            model.setIsJs(isJs);
+
             Map<String, String> translateMap = new LinkedHashMap<>();
             for (String lang : pluginUtil.getSupportLanguageMap().keySet()) {
               if ("ZH".equals(lang)) {
@@ -72,11 +72,11 @@ public class TranslateHandler extends EditorWriteActionHandler {
                     .put(lang, transApi.getTransResult(selectedText, "auto", lang.toLowerCase()));
               }
             }
-            model.setLastUpdate(new Date(new java.util.Date().getTime()));
             model.setTranslateMap(translateMap);
-          } else {
-            model.setIsJs(isJs);
           }
+          model.setLastUpdate(new Date(new java.util.Date().getTime()));
+          model.setFileType(fileType);
+          model.setFileName(fileName);
           mHandler.handleResult(editor, pluginUtil, model, fileType);
         } catch (Exception e) {
           mHandler.handleError(editor, e.getMessage());

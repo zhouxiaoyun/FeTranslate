@@ -28,8 +28,13 @@ public class TranslateModifyAction extends EditorAction {
         String fileType) {
       Application app = ApplicationManager.getApplication();
       app.invokeLater(() -> {
-        TranslateForm translateForm = new TranslateForm(editor, pluginUtil, model, fileType);
-        translateForm.setVisible(true);
+        try {
+          pluginUtil.getDbUtil().update(model);
+          TranslateForm translateForm = new TranslateForm(editor, pluginUtil, model, fileType);
+          translateForm.setVisible(true);
+        } catch (Exception e) {
+          showErrorBallon(editor, e.getMessage());
+        }
       });
     }
 

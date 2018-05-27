@@ -72,9 +72,10 @@ public class TranslateReplaceAction extends EditorAction {
       @Override
       public void handleError(Editor editor, String errMessage) {
         Application app = ApplicationManager.getApplication();
-        app.invokeLater(() -> {BalloonBuilder builder =
-            JBPopupFactory.getInstance()
-                .createHtmlTextBalloonBuilder("FE企业运营管理平台", MessageType.ERROR, null);
+        app.invokeLater(() -> {
+          BalloonBuilder builder =
+              JBPopupFactory.getInstance()
+                  .createHtmlTextBalloonBuilder("FE企业运营管理平台", MessageType.ERROR, null);
           Balloon balloon = builder.createBalloon();
           balloon.setTitle(errMessage);
           CaretModel caretModel = editor.getCaretModel();
@@ -89,7 +90,8 @@ public class TranslateReplaceAction extends EditorAction {
   @Override
   public void update(Editor editor, Presentation presentation, DataContext dataContext) {
     String fileName = dataContext.getData(CommonDataKeys.PSI_FILE).toString().toLowerCase();
-    if (fileName.endsWith(".java") || fileName.endsWith(".html") || fileName.endsWith(".js")) {
+    if (fileName.endsWith(".java") || fileName.endsWith(".html") || fileName.endsWith(".js")
+        || fileName.endsWith(".jsp")) {
       super.update(editor, presentation, dataContext);
     } else {
       presentation.setVisible(false);
