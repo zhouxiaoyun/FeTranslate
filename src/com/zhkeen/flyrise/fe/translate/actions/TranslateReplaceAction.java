@@ -1,8 +1,5 @@
 package com.zhkeen.flyrise.fe.translate.actions;
 
-import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.CaretModel;
@@ -39,16 +36,16 @@ public class TranslateReplaceAction extends EditorAction {
             String newText = "";
             switch (fileType) {
               case ".java":
-                newText = String.format(JAVA_FORMART, model.getId());
+                newText = String.format(Constants.JAVA_FORMART, model.getId());
                 break;
               case ".jsp":
-                newText = String.format(JSP_FORMART, model.getId());
+                newText = String.format(Constants.JSP_FORMART, model.getId());
                 break;
               case ".js":
-                newText = String.format(JS_FORMART, model.getId());
+                newText = String.format(Constants.JS_FORMART, model.getId());
                 break;
               case ".html":
-                newText = String.format(HTML_FORMART, model.getId());
+                newText = String.format(Constants.HTML_FORMART, model.getId());
                 break;
               default:
                 break;
@@ -67,9 +64,10 @@ public class TranslateReplaceAction extends EditorAction {
       @Override
       public void handleError(Editor editor, String errMessage) {
         Application app = ApplicationManager.getApplication();
-        app.invokeLater(() -> {BalloonBuilder builder =
-            JBPopupFactory.getInstance()
-                .createHtmlTextBalloonBuilder("FE企业运营管理平台", MessageType.ERROR, null);
+        app.invokeLater(() -> {
+          BalloonBuilder builder =
+              JBPopupFactory.getInstance()
+                  .createHtmlTextBalloonBuilder("FE企业运营管理平台", MessageType.ERROR, null);
           Balloon balloon = builder.createBalloon();
           balloon.setTitle(errMessage);
           CaretModel caretModel = editor.getCaretModel();

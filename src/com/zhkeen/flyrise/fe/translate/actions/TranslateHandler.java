@@ -42,10 +42,6 @@ public class TranslateHandler extends EditorWriteActionHandler {
           DbUtil dbUtil = pluginUtil.getDbUtil();
           String fileName = dataContext.getData(CommonDataKeys.PSI_FILE).toString();
           String fileType = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
-          String isJs = "0";
-          if (".js".equals(fileType)) {
-            isJs = "1";
-          }
           TranslateResultModel model;
           Matcher m = Constants.PATTERN_TRANSLATE.matcher(selectedText);
           if (m.find()) {

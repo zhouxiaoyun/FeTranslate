@@ -8,22 +8,6 @@ import java.util.Map;
  */
 public class TranslateResultModel {
 
-    /**
-     * 编号
-     */
-    private String id;
-    /**
-     * 是否包含在JS文件中
-     */
-    private String isJs;
-    /**
-     * 翻译MAP，语言种类-翻译结果
-     */
-    private Map<String, String> translateMap;
-    /**
-     * 最后更新时间，方便维护时按逆序排列
-     */
-    private Date lastUpdate;
   private String id;
   private Map<String, String> translateMap;
   private Date lastUpdate;
