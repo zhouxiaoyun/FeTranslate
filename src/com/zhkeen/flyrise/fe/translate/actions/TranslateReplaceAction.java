@@ -1,10 +1,5 @@
 package com.zhkeen.flyrise.fe.translate.actions;
 
-import static com.zhkeen.flyrise.fe.translate.utils.Constants.HTML_FORMART;
-import static com.zhkeen.flyrise.fe.translate.utils.Constants.JAVA_FORMART;
-import static com.zhkeen.flyrise.fe.translate.utils.Constants.JSP_FORMART;
-import static com.zhkeen.flyrise.fe.translate.utils.Constants.JS_FORMART;
-
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.Presentation;

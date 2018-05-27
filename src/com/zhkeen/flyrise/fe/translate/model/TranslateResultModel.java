@@ -24,36 +24,49 @@ public class TranslateResultModel {
      * 最后更新时间，方便维护时按逆序排列
      */
     private Date lastUpdate;
+  private String id;
+  private Map<String, String> translateMap;
+  private Date lastUpdate;
+  private String fileType;
+  private String fileName;
 
-    public String getId() {
-        return id;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public String getIsJs() {
-        return isJs;
-    }
+  public Map<String, String> getTranslateMap() {
+    return translateMap;
+  }
 
-    public void setIsJs(String isJs) {
-        this.isJs = isJs;
-    }
+  public void setTranslateMap(Map<String, String> translateMap) {
+    this.translateMap = translateMap;
+  }
 
-    public Map<String, String> getTranslateMap() {
-        return translateMap;
-    }
+  public Date getLastUpdate() {
+    return lastUpdate;
+  }
 
-    public void setTranslateMap(Map<String, String> translateMap) {
-        this.translateMap = translateMap;
-    }
+  public void setLastUpdate(Date lastUpdate) {
+    this.lastUpdate = lastUpdate;
+  }
 
-    public Date getLastUpdate() {
-        return lastUpdate;
-    }
+  public String getFileType() {
+    return fileType;
+  }
 
-    public void setLastUpdate(Date lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
+  public void setFileType(String fileType) {
+    this.fileType = fileType;
+  }
+
+  public String getFileName() {
+    return fileName;
+  }
+
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
+  }
 }
