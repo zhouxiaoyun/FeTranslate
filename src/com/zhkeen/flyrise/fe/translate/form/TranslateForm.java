@@ -1,11 +1,9 @@
 package com.zhkeen.flyrise.fe.translate.form;
 
 import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.editor.EditorModificationUtil;
-import com.intellij.openapi.editor.SelectionModel;
-import com.intellij.ui.components.JBScrollPane;
 import com.zhkeen.flyrise.fe.translate.model.TranslateResultModel;
 import com.zhkeen.flyrise.fe.translate.utils.Constants;
+import com.zhkeen.flyrise.fe.translate.utils.MD5;
 import com.zhkeen.flyrise.fe.translate.utils.PluginUtil;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -14,15 +12,15 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.Matcher;
+import java.io.UnsupportedEncodingException;
+import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,76 +28,143 @@ import org.slf4j.LoggerFactory;
 public class TranslateForm extends JDialog implements ActionListener {
 
   private Logger logger = LoggerFactory.getLogger(TranslateForm.class);
-  private Map<String, JTextArea> controlls = new HashMap<>();
+  private JTextField codeTextField;
+  private JTextArea cnTextArea;
+  private JTextArea twTextArea;
+  private JTextArea usTextArea;
 
-  public TranslateForm(Editor editor, PluginUtil pluginUtil, TranslateResultModel model,
-      String fileType) {
+  public TranslateForm(Editor editor, PluginUtil pluginUtil, final TranslateResultModel model,
+      String fileType, int editType, String message) {
     super(JOptionPane.getRootFrame(), "FE企业运营管理平台", true);
-
-    Map<String, String> translateMap = model.getTranslateMap();
-    Map<String, String> supportLanguageMap = pluginUtil.getSupportLanguageMap();
 
     Container panel = getContentPane();
     GridBagLayout layout = new GridBagLayout();
     panel.setLayout(layout);
 
-    JLabel idLabel = new JLabel("ID:");
-    layout.setConstraints(idLabel,
+    JLabel codeLabel = new JLabel("编码:");
+    layout.setConstraints(codeLabel,
         new GBC(0, 0).setAnchor(GBC.NORTHEAST)
             .setInsets(Constants.MARGIN, Constants.MARGIN, Constants.MARGIN, Constants.MARGIN)
             .setWeight(0, 0));
-    panel.add(idLabel);
+    panel.add(codeLabel);
 
-    JLabel idValueLabel = new JLabel(String.valueOf(model.getId()));
-    layout.setConstraints(idValueLabel,
+    codeTextField = new JTextField();
+    layout.setConstraints(codeTextField,
         new GBC(1, 0).setFill(GBC.BOTH)
             .setInsets(Constants.MARGIN, Constants.MARGIN, Constants.MARGIN, Constants.MARGIN)
             .setWeight(100, 0));
-    panel.add(idValueLabel);
-
-    int i = 1;
-    for (String lang : translateMap.keySet()) {
-      JLabel label = new JLabel(supportLanguageMap.get(lang) + ":");
-      layout.setConstraints(label,
-          new GBC(0, i).setAnchor(GBC.NORTHEAST)
-              .setInsets(Constants.MARGIN, Constants.MARGIN, Constants.MARGIN, Constants.MARGIN)
-              .setWeight(0, 100));
-      panel.add(label);
-
-      JTextArea area = new JTextArea(translateMap.get(lang), Constants.TEXTAREA_ROWS,
-          Constants.TEXTAREA_COLS);
-      area.setLineWrap(true);
-      area.setWrapStyleWord(false);
-      controlls.put(lang, area);
-
-      JBScrollPane scrollPane = new JBScrollPane(area);
-      layout.setConstraints(scrollPane,
-          new GBC(1, i).setFill(GBC.BOTH)
-              .setInsets(Constants.MARGIN, Constants.MARGIN, Constants.MARGIN, Constants.MARGIN)
-              .setWeight(100, 100));
-      panel.add(scrollPane);
-      i++;
+    if (model != null) {
+      codeTextField.setText(model.getCode());
+      codeTextField.setEnabled(false);
+    } else {
+      try {
+        codeTextField.setText(MD5.md5(message));
+      } catch (Exception e) {
+        codeTextField.setText(String.valueOf(new Date().getTime()));
+      }
     }
+    panel.add(codeTextField);
+
+    JLabel cnLabel = new JLabel("简体中文:");
+    layout.setConstraints(cnLabel,
+        new GBC(0, 1).setAnchor(GBC.NORTHEAST)
+            .setInsets(Constants.MARGIN, Constants.MARGIN, Constants.MARGIN, Constants.MARGIN)
+            .setWeight(0, 0));
+    panel.add(cnLabel);
+
+    cnTextArea = new JTextArea("", Constants.TEXTAREA_ROWS, Constants.TEXTAREA_COLS);
+    layout.setConstraints(cnTextArea,
+        new GBC(1, 1).setFill(GBC.BOTH)
+            .setInsets(Constants.MARGIN, Constants.MARGIN, Constants.MARGIN, Constants.MARGIN)
+            .setWeight(100, 0));
+    if (model != null) {
+      cnTextArea.setText(model.getCn());
+    } else {
+      cnTextArea.setText(message);
+    }
+    panel.add(cnTextArea);
+
+    JLabel twLabel = new JLabel("繁体中文:");
+    layout.setConstraints(twLabel,
+        new GBC(0, 2).setAnchor(GBC.NORTHEAST)
+            .setInsets(Constants.MARGIN, Constants.MARGIN, Constants.MARGIN, Constants.MARGIN)
+            .setWeight(0, 0));
+    panel.add(twLabel);
+
+    twTextArea = new JTextArea("", Constants.TEXTAREA_ROWS, Constants.TEXTAREA_COLS);
+    layout.setConstraints(twTextArea,
+        new GBC(1, 2).setFill(GBC.BOTH)
+            .setInsets(Constants.MARGIN, Constants.MARGIN, Constants.MARGIN, Constants.MARGIN)
+            .setWeight(100, 0));
+    if (model != null) {
+      twTextArea.setText(model.getTw());
+    } else {
+      try {
+        twTextArea.setText(pluginUtil.getTransApi().getTransResult(message, "auto", "cht"));
+      } catch (Exception e) {
+        JOptionPane
+            .showMessageDialog(null, e.getMessage(), "FE企业运营管理平台", JOptionPane.ERROR_MESSAGE);
+      }
+    }
+    panel.add(twTextArea);
+
+    JLabel usLabel = new JLabel("英文:");
+    layout.setConstraints(usLabel,
+        new GBC(0, 3).setAnchor(GBC.NORTHEAST)
+            .setInsets(Constants.MARGIN, Constants.MARGIN, Constants.MARGIN, Constants.MARGIN)
+            .setWeight(0, 0));
+    panel.add(usLabel);
+
+    usTextArea = new JTextArea("", Constants.TEXTAREA_ROWS, Constants.TEXTAREA_COLS);
+    layout.setConstraints(usTextArea,
+        new GBC(1, 3).setFill(GBC.BOTH)
+            .setInsets(Constants.MARGIN, Constants.MARGIN, Constants.MARGIN, Constants.MARGIN)
+            .setWeight(100, 0));
+    if (model != null) {
+      usTextArea.setText(model.getUs());
+    } else {
+      try {
+        usTextArea.setText(pluginUtil.getTransApi().getTransResult(message, "auto", "en"));
+      } catch (Exception e) {
+        JOptionPane
+            .showMessageDialog(null, e.getMessage(), "FE企业运营管理平台", JOptionPane.ERROR_MESSAGE);
+      }
+    }
+    panel.add(usTextArea);
 
     JButton button = new JButton("确定");
     layout.setConstraints(button,
-        new GBC(0, i, 2, 1).setFill(GBC.CENTER)
+        new GBC(0, 4, 2, 1).setFill(GBC.CENTER)
             .setInsets(Constants.MARGIN, Constants.MARGIN, Constants.MARGIN, Constants.MARGIN)
             .setWeight(100, 0));
     panel.add(button);
+
     button.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
         try {
-          for (String lang : translateMap.keySet()) {
-            translateMap.put(lang, controlls.get(lang).getText().trim());
+          TranslateResultModel translateResultModel = new TranslateResultModel();
+          translateResultModel.setCode(codeTextField.getText());
+          translateResultModel.setCn(cnTextArea.getText());
+          translateResultModel.setTw(twTextArea.getText());
+          translateResultModel.setUs(usTextArea.getText());
+          translateResultModel.setUpdateTime(Constants.SDF_TIME.format(new Date()));
+          if (model == null) {
+            translateResultModel.setUnitCode("1");
+            translateResultModel.setUserId("1");
+            pluginUtil.getDbUtil().insertTranslate(translateResultModel);
+          } else {
+            translateResultModel.setId(model.getId());
+            translateResultModel.setUnitCode(model.getUnitCode());
+            translateResultModel.setUserId(model.getUserId());
+            pluginUtil.getDbUtil().updateTranslate(translateResultModel);
           }
-          pluginUtil.getDbUtil().update(model);
-
           setVisible(false);
           dispose();
         } catch (Exception e1) {
           logger.error(e1.getMessage());
+          JOptionPane
+              .showMessageDialog(null, e1.getMessage(), "FE企业运营管理平台", JOptionPane.ERROR_MESSAGE);
         }
       }
     });

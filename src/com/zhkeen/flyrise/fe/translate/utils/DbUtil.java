@@ -7,9 +7,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +15,7 @@ public class DbUtil {
   private Logger logger = LoggerFactory.getLogger(DbUtil.class);
 
   private static final String TABLE_TRANSLATE = "TRANSLATE";
-  private static final String TABLE_TRANSLATE_RELATE = "TRANSLATE_RELATE";
+
   private JdbcConnectionModel model;
 
   public DbUtil(JdbcConnectionModel model) {
@@ -32,125 +29,121 @@ public class DbUtil {
     return connection;
   }
 
-  public TranslateResultModel findByMessage(String defaultLanguage, String message,
-      Map<String, String> supportLanguageMap) throws SQLException, ClassNotFoundException {
-    String langFields = getSearchField(supportLanguageMap);
+  public TranslateResultModel findByMessage(String message)
+      throws SQLException, ClassNotFoundException {
+
     String selectSql = String
-        .format("SELECT ID, %s FROM %s WHERE %s = ?", langFields, TABLE_TRANSLATE,
-            defaultLanguage);
-    logger.debug(selectSql);
+        .format("SELECT ID,CODE,CN,TW,US,UPDATETIME,UNITCODE,USERID FROM %s WHERE CN = ?",
+            TABLE_TRANSLATE);
     Connection connection = getConnection();
     PreparedStatement pstmt = connection.prepareStatement(selectSql);
     pstmt.setString(1, message);
     ResultSet rs = pstmt.executeQuery();
-    TranslateResultModel model = buildResultModel(rs, supportLanguageMap);
+    TranslateResultModel model = buildResultModel(rs);
     connection.close();
     return model;
   }
 
-  public TranslateResultModel findById(String id,
-      Map<String, String> supportLanguageMap) throws SQLException, ClassNotFoundException {
-    String langFields = getSearchField(supportLanguageMap);
+  public TranslateResultModel findByCode(String code) throws SQLException, ClassNotFoundException {
     String selectSql = String
-        .format("SELECT ID, %s FROM %s WHERE ID = ?", langFields, TABLE_TRANSLATE);
+        .format("SELECT ID,CODE,CN,TW,US,UPDATETIME,UNITCODE,USERID FROM %s WHERE CODE = ?",
+            TABLE_TRANSLATE);
     logger.debug(selectSql);
     Connection connection = getConnection();
     PreparedStatement pstmt = connection.prepareStatement(selectSql);
-    pstmt.setString(1, id);
+    pstmt.setString(1, code);
     ResultSet rs = pstmt.executeQuery();
-    TranslateResultModel model = buildResultModel(rs, supportLanguageMap);
+    TranslateResultModel model = buildResultModel(rs);
     connection.close();
     return model;
   }
 
-  public void update(TranslateResultModel model) throws SQLException, ClassNotFoundException {
+  public void insertTranslate(TranslateResultModel model)
+      throws SQLException, ClassNotFoundException {
     String selectSql = String
-        .format("SELECT ID FROM %s WHERE ID = ?", TABLE_TRANSLATE);
+        .format("SELECT ID FROM %s WHERE CODE = ? OR CN = ?", TABLE_TRANSLATE);
     Connection connection = getConnection();
     PreparedStatement pstmt = connection.prepareStatement(selectSql);
-    pstmt.setString(1, model.getId());
+    pstmt.setString(1, model.getCode());
+    pstmt.setString(2, model.getCn());
+
     ResultSet rs = pstmt.executeQuery();
-
     if (rs.next()) {
-      String updateSql = "UPDATE " + TABLE_TRANSLATE + " SET ";
-      for (String lang : model.getTranslateMap().keySet()) {
-        updateSql = updateSql + " " + lang + " = ?,";
-      }
-      updateSql = updateSql + " LASTUPDATE = ? WHERE ID = ?";
-      logger.debug(updateSql);
-      PreparedStatement psUpdate = connection.prepareStatement(updateSql);
-      int i = 1;
-      for (String lang : model.getTranslateMap().keySet()) {
-        psUpdate.setString(i, model.getTranslateMap().get(lang));
-        i++;
-      }
-      psUpdate.setDate(i, model.getLastUpdate());
-      psUpdate.setString(i + 1, model.getId());
-      psUpdate.executeUpdate();
+      throw new SQLException("已经存在相同的编码[CODE]或者条目[CN]!");
     } else {
-      String insertSql =
-          "INSERT INTO " + TABLE_TRANSLATE + "(ID, " + getSearchField(model.getTranslateMap())
-              + ", LASTUPDATE) VALUES(?,";
-      int j = model.getTranslateMap().size();
-      for (int i = 0; i < j; i++) {
-        insertSql = insertSql + "?,";
+      int maxId = 1;
+      String maxIdSql = String.format("SELECT MAX(ID) AS MAXID FROM %s", TABLE_TRANSLATE);
+      PreparedStatement pstmtMaxId = connection.prepareStatement(maxIdSql);
+      ResultSet rsMaxId = pstmtMaxId.executeQuery();
+      if (rsMaxId.next()) {
+        maxId = rsMaxId.getInt("MAXID") + 1;
       }
-      insertSql = insertSql + "?)";
-      logger.debug(insertSql);
-      PreparedStatement psInsert = connection.prepareStatement(insertSql);
-      psInsert.setString(1, model.getId());
-      int m = 2;
-      for (String lang : model.getTranslateMap().keySet()) {
-        psInsert.setString(m, model.getTranslateMap().get(lang));
-        m++;
-      }
-      psInsert.setDate(m, model.getLastUpdate());
-      psInsert.execute();
-    }
-    if (StringUtils.isNotEmpty(model.getFileType()) && StringUtils
-        .isNotEmpty(model.getFileName())) {
-      String updateRelate = " IF NOT EXISTS (SELECT ID FROM " + TABLE_TRANSLATE_RELATE
-          + " WHERE ID = ? AND RELATE_TYPE = ? AND RELATION = ?) "
-          + " BEGIN INSERT INTO " + TABLE_TRANSLATE_RELATE
-          + "(ID, RELATE_TYPE, RELATION) VALUES(?, ?, ?) END";
-
-      PreparedStatement psUpdateRelate = connection.prepareStatement(updateRelate);
-      psUpdateRelate.setString(1, model.getId());
-      psUpdateRelate.setString(2, model.getFileType());
-      psUpdateRelate.setString(3, model.getFileName());
-      psUpdateRelate.setString(4, model.getId());
-      psUpdateRelate.setString(5, model.getFileType());
-      psUpdateRelate.setString(6, model.getFileName());
-      psUpdateRelate.execute();
+      String insertSql = String
+          .format(
+              "INSERT INTO %s(ID,CODE,CN,TW,US,UPDATETIME,UNITCODE,USERID) VALUES(?,?,?,?,?,?,?,?)",
+              TABLE_TRANSLATE);
+      PreparedStatement pstmtInsert = connection.prepareStatement(insertSql);
+      pstmtInsert.setInt(1, maxId);
+      pstmtInsert.setString(2, model.getCode());
+      pstmtInsert.setString(3, model.getCn());
+      pstmtInsert.setString(4, model.getTw());
+      pstmtInsert.setString(5, model.getUs());
+      pstmtInsert.setString(6, model.getUpdateTime());
+      pstmtInsert.setString(7, model.getUnitCode());
+      pstmtInsert.setString(8, model.getUserId());
+      pstmtInsert.executeUpdate();
     }
     connection.close();
   }
 
-  private TranslateResultModel buildResultModel(ResultSet rs,
-      Map<String, String> supportLanguageMap)
+  public void updateTranslate(TranslateResultModel model)
+      throws SQLException, ClassNotFoundException {
+
+    Connection connection = getConnection();
+    String selectSql = String
+        .format("SELECT ID FROM %s WHERE (CODE = ? OR CN = ?) AND ID <> ?", TABLE_TRANSLATE);
+    PreparedStatement pstmt = connection.prepareStatement(selectSql);
+    pstmt.setString(1, model.getCode());
+    pstmt.setString(2, model.getCn());
+    pstmt.setInt(3, model.getId());
+
+    ResultSet rs = pstmt.executeQuery();
+    if (rs.next()) {
+      throw new SQLException("已经存在相同的编码[CODE]或者条目[CN]!");
+    } else {
+      String insertSql = String
+          .format(
+              "UPDATE %s SET CODE = ?, CN = ?, TW = ?, US = ?, UPDATETIME = ?, UNITCODE = ?, USERID = ? WHERE ID = ?", TABLE_TRANSLATE);
+      PreparedStatement pstmtUpdate = connection.prepareStatement(insertSql);
+      pstmtUpdate.setString(1, model.getCode());
+      pstmtUpdate.setString(2, model.getCn());
+      pstmtUpdate.setString(3, model.getTw());
+      pstmtUpdate.setString(4, model.getUs());
+      pstmtUpdate.setString(5, model.getUpdateTime());
+      pstmtUpdate.setString(6, model.getUnitCode());
+      pstmtUpdate.setString(7, model.getUserId());
+      pstmtUpdate.setInt(8, model.getId());
+      pstmtUpdate.executeUpdate();
+      connection.close();
+    }
+  }
+
+  private TranslateResultModel buildResultModel(ResultSet rs)
       throws SQLException {
     if (rs.next()) {
       TranslateResultModel model = new TranslateResultModel();
-      Map<String, String> map = new LinkedHashMap<>();
-      model.setId(rs.getString("ID"));
-      for (String lang : supportLanguageMap.keySet()) {
-        map.put(lang, rs.getString(lang));
-      }
-      model.setLastUpdate(rs.getDate("LASTUPDATE"));
-      model.setTranslateMap(map);
+      model.setId(rs.getInt("ID"));
+      model.setCode(rs.getString("CODE"));
+      model.setCn(rs.getString("CN"));
+      model.setTw(rs.getString("TW"));
+      model.setUs(rs.getString("US"));
+      model.setUpdateTime(rs.getString("UPDATETIME"));
+      model.setUnitCode(rs.getString("UNITCODE"));
+      model.setUserId(rs.getString("USERID"));
       return model;
     } else {
       return null;
     }
-  }
-
-  private String getSearchField(Map<String, String> supportLanguageMap) {
-    String field = "";
-    for (String lang : supportLanguageMap.keySet()) {
-      field = field + lang + ",";
-    }
-    field = field.substring(0, field.length() - 1);
-    return field;
   }
 
 }

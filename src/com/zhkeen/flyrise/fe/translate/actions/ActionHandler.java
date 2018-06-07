@@ -6,7 +6,8 @@ import com.zhkeen.flyrise.fe.translate.utils.PluginUtil;
 
 public interface ActionHandler {
 
-  void handleResult(Editor editor, PluginUtil pluginUtil, TranslateResultModel model, String fileType);
+  void handleResult(Editor editor, PluginUtil pluginUtil, TranslateResultModel model,
+      String fileType, int editType, String message);
 
   void handleError(Editor editor, String errMessage);
 }

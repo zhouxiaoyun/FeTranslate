@@ -1,6 +1,7 @@
 package com.zhkeen.flyrise.fe.translate.utils;
 
 import com.google.common.collect.ImmutableMap;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,27 +15,14 @@ public class Constants {
 
   public static final String JDBC_PORPERTIES_FILE = "properties/jdbc.properties";
 
-  public static final Pattern PATTERN_TRANSLATE = Pattern.compile("[0-9]{16}");
-  public static Map<String, String> ALL_LANGUAGE_MAP = getAllLanguageMap();
+  public static final Pattern PATTERN_JAVA_TRANSLATE = Pattern.compile("I18N.get\\(\"(.+?)\"\\)");
+  public static final Pattern PATTERN_HTML_TRANSLATE = Pattern.compile("I18N.get\\(\"(.+?)\"\\)");
 
-  public static final String JAVA_FORMART = "translateUtil.get(%sL)";
-  public static final String JSP_FORMART = "<%%=translateUtil.get(%sL)%%>";
-  public static final String JS_FORMART = "translateUtil.s%s";
-  public static final String HTML_FORMART = "translateUtil.s%s";
+  public static final String JAVA_FORMART = "I18N.get(\"%s\")";
+  public static final String JSP_FORMART = "<%%=I18N.get(\"%s\")%%>";
+  public static final String JS_FORMART = "I18N.get('%s')";
+  public static final String HTML_FORMART = "I18N.get('%s')";
 
-  private static Map<String, String> getAllLanguageMap(){
-    Map<String, String> allMap = new LinkedHashMap<>();
-    allMap.put("ZH","简体中文");
-    allMap.put("CHT","繁体中文");
-    allMap.put("EN","英文");
-    allMap.put("JP","日语");
-    allMap.put("KOR","韩语");
-    allMap.put("FRA","法语");
-    allMap.put("SPA","西班牙语");
-    allMap.put("RU","俄语");
-    allMap.put("DE","德语");
-    allMap.put("PT","葡萄牙语");
-    return allMap;
-  }
+  public static final SimpleDateFormat SDF_TIME = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 }

@@ -5,18 +5,12 @@ import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.actionSystem.EditorWriteActionHandler;
-import com.zhkeen.flyrise.fe.translate.configuration.ConfigurationState;
-import com.zhkeen.flyrise.fe.translate.configuration.PersistingService;
 import com.zhkeen.flyrise.fe.translate.model.TranslateResultModel;
 import com.zhkeen.flyrise.fe.translate.utils.Constants;
 import com.zhkeen.flyrise.fe.translate.utils.DbUtil;
-import com.zhkeen.flyrise.fe.translate.utils.LanguageIdUtil;
 import com.zhkeen.flyrise.fe.translate.utils.PluginUtil;
-import com.zhkeen.flyrise.fe.translate.utils.TransApi;
-import java.sql.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.jetbrains.annotations.Nullable;
 
 public class TranslateHandler extends EditorWriteActionHandler {
@@ -42,38 +36,33 @@ public class TranslateHandler extends EditorWriteActionHandler {
           DbUtil dbUtil = pluginUtil.getDbUtil();
           String fileName = dataContext.getData(CommonDataKeys.PSI_FILE).toString();
           String fileType = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
-          TranslateResultModel model;
-          Matcher m = Constants.PATTERN_TRANSLATE.matcher(selectedText);
-          if (m.find()) {
-            model = dbUtil
-                .findById(m.group(), pluginUtil.getSupportLanguageMap());
-          } else {
-            model = dbUtil
-                .findByMessage(pluginUtil.getDefaultLanguage(), selectedText,
-                    pluginUtil.getSupportLanguageMap());
-          }
-          if (model == null) {
-            ConfigurationState state = PersistingService.getInstance(editor.getProject())
-                .getState();
-            TransApi transApi = new TransApi(state.getAppId(), state.getSecretKey());
-            model = new TranslateResultModel();
-            model.setId(LanguageIdUtil.generateId());
+          TranslateResultModel model = null;
+          int editType = 1;
+          String message = selectedText;
+          Pattern pattern = null;
 
-            Map<String, String> translateMap = new LinkedHashMap<>();
-            for (String lang : pluginUtil.getSupportLanguageMap().keySet()) {
-              if ("ZH".equals(lang)) {
-                translateMap.put(lang, selectedText);
-              } else {
-                translateMap
-                    .put(lang, transApi.getTransResult(selectedText, "auto", lang.toLowerCase()));
-              }
-            }
-            model.setTranslateMap(translateMap);
+          if (".java".equals(fileType) || ".jsp".equals(fileType)) {
+            pattern = Constants.PATTERN_JAVA_TRANSLATE;
+          } else if (".html".equals(fileType) || ".js".equals(fileType)) {
+            pattern = Constants.PATTERN_HTML_TRANSLATE;
+          } else {
+            mHandler.handleError(editor, "无效的文件类型！");
+            return;
           }
-          model.setLastUpdate(new Date(new java.util.Date().getTime()));
-          model.setFileType(fileType);
-          model.setFileName(fileName);
-          mHandler.handleResult(editor, pluginUtil, model, fileType);
+
+          Matcher matcher = pattern.matcher(selectedText);
+          if (matcher.find()) {
+            editType = 2;
+            model = dbUtil.findByCode(matcher.group(1));
+            if (model == null) {
+              mHandler.handleError(editor, "翻译条目已不存在！");
+              return;
+            }
+          } else {
+            model = dbUtil.findByMessage(selectedText);
+          }
+
+          mHandler.handleResult(editor, pluginUtil, model, fileType, editType, message);
         } catch (Exception e) {
           mHandler.handleError(editor, e.getMessage());
         }

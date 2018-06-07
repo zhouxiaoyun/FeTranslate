@@ -11,9 +11,8 @@ public class PluginUtil {
   private final Logger logger = LoggerFactory.getLogger(PluginUtil.class);
 
   private boolean needMultiLanguage = false;
-  private String defaultLanguage;
-  private Map<String, String> supportLanguageMap;
   private DbUtil dbUtil;
+  private TransApi transApi;
 
   public PluginUtil(VirtualFile baseDir) {
     try {
@@ -22,10 +21,9 @@ public class PluginUtil {
       } else {
         needMultiLanguage = false;
       }
-      this.defaultLanguage = "ZH";
-      this.supportLanguageMap = Constants.ALL_LANGUAGE_MAP;
       JdbcConnectionModel jdbcConnectionModel = FileUtil.readJdbcConnectionModel(baseDir);
       this.dbUtil = new DbUtil(jdbcConnectionModel);
+      this.transApi = new TransApi("20180503000153011", "_MRqRxWs1i75bfvXg4kU");
     } catch (Exception e) {
       needMultiLanguage = false;
       logger.error(e.getMessage());
@@ -36,15 +34,15 @@ public class PluginUtil {
     return dbUtil;
   }
 
-  public String getDefaultLanguage() {
-    return defaultLanguage;
-  }
-
   public boolean isNeedMultiLanguage() {
     return needMultiLanguage;
   }
 
-  public Map<String, String> getSupportLanguageMap() {
-    return supportLanguageMap;
+  public TransApi getTransApi() {
+    return transApi;
+  }
+
+  public void setTransApi(TransApi transApi) {
+    this.transApi = transApi;
   }
 }

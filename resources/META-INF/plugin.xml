@@ -24,28 +24,7 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <!-- Add your extensions here -->
-    <applicationConfigurable
-      instance="com.zhkeen.flyrise.fe.translate.configuration.ConfigurationComponent">
-
-    </applicationConfigurable>
   </extensions>
-
-  <application-components>
-    <component>
-      <implementation-class>com.zhkeen.flyrise.fe.translate.configuration.PersistingService
-      </implementation-class>
-      <interface-class>com.zhkeen.flyrise.fe.translate.configuration.PersistingService
-      </interface-class>
-    </component>
-    <component>
-      <interface-class>com.zhkeen.flyrise.fe.translate.configuration.ConfigurationComponent
-      </interface-class>
-      <implementation-class>com.zhkeen.flyrise.fe.translate.configuration.ConfigurationComponent
-      </implementation-class>
-      <option value="true" name="workspace"/>
-    </component>
-  </application-components>
-
 
   <actions>
     <action id="com.zhkeen.flyrise.fe.translate.actions.TranslateReplaceAction"
@@ -53,12 +32,6 @@
       description="翻译">
       <add-to-group group-id="EditMenu" anchor="last"/>
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl F1"/>
-    </action>
-    <action id="com.zhkeen.flyrise.fe.translate.actions.TranslateModifyAction"
-      class="com.zhkeen.flyrise.fe.translate.actions.TranslateModifyAction" text="View Translate"
-      description="查看翻译结果并修改">
-      <add-to-group group-id="EditMenu" anchor="last"/>
-      <keyboard-shortcut keymap="$default" first-keystroke="ctrl F2"/>
     </action>
   </actions>
 

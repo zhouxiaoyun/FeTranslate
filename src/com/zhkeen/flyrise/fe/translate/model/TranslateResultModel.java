@@ -8,49 +8,76 @@ import java.util.Map;
  */
 public class TranslateResultModel {
 
-  private String id;
-  private Map<String, String> translateMap;
-  private Date lastUpdate;
-  private String fileType;
-  private String fileName;
+  private int id;
+  private String code;
+  private String cn;
+  private String tw;
+  private String us;
+  private String updateTime;
+  private String unitCode;
+  private String userId;
 
-  public String getId() {
+  public int getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(int id) {
     this.id = id;
   }
 
-  public Map<String, String> getTranslateMap() {
-    return translateMap;
+  public String getCode() {
+    return code;
   }
 
-  public void setTranslateMap(Map<String, String> translateMap) {
-    this.translateMap = translateMap;
+  public void setCode(String code) {
+    this.code = code;
   }
 
-  public Date getLastUpdate() {
-    return lastUpdate;
+  public String getCn() {
+    return cn;
   }
 
-  public void setLastUpdate(Date lastUpdate) {
-    this.lastUpdate = lastUpdate;
+  public void setCn(String cn) {
+    this.cn = cn;
   }
 
-  public String getFileType() {
-    return fileType;
+  public String getTw() {
+    return tw;
   }
 
-  public void setFileType(String fileType) {
-    this.fileType = fileType;
+  public void setTw(String tw) {
+    this.tw = tw;
   }
 
-  public String getFileName() {
-    return fileName;
+  public String getUs() {
+    return us;
   }
 
-  public void setFileName(String fileName) {
-    this.fileName = fileName;
+  public void setUs(String us) {
+    this.us = us;
+  }
+
+  public String getUpdateTime() {
+    return updateTime;
+  }
+
+  public void setUpdateTime(String updateTime) {
+    this.updateTime = updateTime;
+  }
+
+  public String getUnitCode() {
+    return unitCode;
+  }
+
+  public void setUnitCode(String unitCode) {
+    this.unitCode = unitCode;
+  }
+
+  public String getUserId() {
+    return userId;
+  }
+
+  public void setUserId(String userId) {
+    this.userId = userId;
   }
 }
