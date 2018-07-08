@@ -43,8 +43,10 @@ public class TranslateHandler extends EditorWriteActionHandler {
 
           if (".java".equals(fileType) || ".jsp".equals(fileType)) {
             pattern = Constants.PATTERN_JAVA_TRANSLATE;
-          } else if (".html".equals(fileType) || ".js".equals(fileType)) {
+          } else if (".html".equals(fileType)) {
             pattern = Constants.PATTERN_HTML_TRANSLATE;
+          } else if (".js".equals(fileType)) {
+            pattern = Constants.PATTERN_JS_TRANSLATE;
           } else {
             mHandler.handleError(editor, "无效的文件类型！");
             return;
