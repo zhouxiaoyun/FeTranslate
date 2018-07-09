@@ -27,11 +27,17 @@
   </extensions>
 
   <actions>
-    <action id="com.zhkeen.flyrise.fe.translate.actions.TranslateReplaceAction"
-      class="com.zhkeen.flyrise.fe.translate.actions.TranslateReplaceAction" text="Translate"
+    <action id="com.zhkeen.flyrise.fe.translate.actions.TranslateCnReplaceAction"
+      class="com.zhkeen.flyrise.fe.translate.actions.TranslateCnReplaceAction" text="Translate"
       description="翻译">
       <add-to-group group-id="EditMenu" anchor="last"/>
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl F1"/>
+    </action>
+    <action id="com.zhkeen.flyrise.fe.translate.actions.TranslateRevertAction"
+      class="com.zhkeen.flyrise.fe.translate.actions.TranslateRevertAction" text="TranslateRevert"
+      description="翻译-还原">
+      <add-to-group group-id="EditMenu" anchor="last"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="ctrl F2"/>
     </action>
   </actions>
 

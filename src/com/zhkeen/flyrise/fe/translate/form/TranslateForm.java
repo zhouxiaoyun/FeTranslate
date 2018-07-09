@@ -82,6 +82,7 @@ public class TranslateForm extends JDialog implements ActionListener {
     } else {
       cnTextArea.setText(message);
     }
+    cnTextArea.setEnabled(false);
     panel.add(cnTextArea);
 
     JLabel twLabel = new JLabel("繁体中文:");
