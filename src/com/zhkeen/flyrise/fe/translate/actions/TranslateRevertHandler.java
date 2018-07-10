@@ -4,11 +4,15 @@ import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.editor.EditorModificationUtil;
+import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.editor.actionSystem.EditorWriteActionHandler;
 import com.zhkeen.flyrise.fe.translate.model.TranslateResultModel;
 import com.zhkeen.flyrise.fe.translate.utils.Constants;
 import com.zhkeen.flyrise.fe.translate.utils.DbUtil;
 import com.zhkeen.flyrise.fe.translate.utils.PluginUtil;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.Nullable;
@@ -17,9 +21,9 @@ public class TranslateRevertHandler extends EditorWriteActionHandler {
 
   private PluginUtil pluginUtil;
 
-  private final ActionHandler mHandler;
+  private final ActionRevertHandler mHandler;
 
-  public TranslateRevertHandler(ActionHandler handler) {
+  public TranslateRevertHandler(ActionRevertHandler handler) {
     this.mHandler = handler;
   }
 
@@ -36,7 +40,6 @@ public class TranslateRevertHandler extends EditorWriteActionHandler {
           DbUtil dbUtil = pluginUtil.getDbUtil();
           String fileName = dataContext.getData(CommonDataKeys.PSI_FILE).toString();
           String fileType = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
-          TranslateResultModel model = null;
           int editType = 1;
           String message = selectedText;
           Pattern pattern = null;
@@ -48,18 +51,16 @@ public class TranslateRevertHandler extends EditorWriteActionHandler {
             return;
           }
 
-          Matcher matcher = pattern.matcher(selectedText);
-          if (matcher.find()) {
-            model = dbUtil.findByCode(matcher.group(1));
-            if (model == null) {
-              mHandler.handleError(editor, "翻译条目已不存在！");
-              return;
+          List<TranslateResultModel> models = new ArrayList<>();
+          Matcher matcher = pattern.matcher(message);
+          while (matcher.find()) {
+            TranslateResultModel model = dbUtil.findByCode(matcher.group(1));
+            if (model != null) {
+              models.add(model);
             }
-          } else {
-            mHandler.handleError(editor, "未找到匹配项");
           }
+          mHandler.handleResult(editor, models);
 
-          mHandler.handleResult(editor, pluginUtil, model, fileType, editType, message);
         } catch (Exception e) {
           mHandler.handleError(editor, e.getMessage());
         }

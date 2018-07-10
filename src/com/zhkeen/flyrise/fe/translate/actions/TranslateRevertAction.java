@@ -10,23 +10,25 @@ import com.zhkeen.flyrise.fe.translate.form.TranslateForm;
 import com.zhkeen.flyrise.fe.translate.model.TranslateResultModel;
 import com.zhkeen.flyrise.fe.translate.utils.Constants;
 import com.zhkeen.flyrise.fe.translate.utils.PluginUtil;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class TranslateRevertAction extends EditorAction {
 
   public TranslateRevertAction() {
-    super(new TranslateRevertHandler(new ActionHandler() {
+    super(new TranslateRevertHandler(new ActionRevertHandler() {
       @Override
-      public void handleResult(Editor editor, PluginUtil pluginUtil, TranslateResultModel model,
-          String fileType, int editType, String message) {
+      public void handleResult(Editor editor, List<TranslateResultModel> models) {
         try {
           final SelectionModel selectionModel = editor.getSelectionModel();
           final int selectionStart = selectionModel.getSelectionStart();
 
-          if (editType == 1 && model != null) {
-            String newText = selectionModel.getSelectedText()
-                .replace(String.format("get(\"%s\")", model.getCode()),
-                    String.format("getByChinese(\"%s\")", model.getCn()));
+          if (models.size() > 0) {
+            String newText = selectionModel.getSelectedText();
+            for (TranslateResultModel model : models) {
+              newText = newText.replace(String.format("I18N.get(\"%s\")", model.getCode()),
+                      String.format("I18N.getByChinese(\"%s\")", model.getCn()));
+            }
             if (newText.length() > 0) {
               EditorModificationUtil.deleteSelectedText(editor);
               EditorModificationUtil.insertStringAtCaret(editor, newText);
