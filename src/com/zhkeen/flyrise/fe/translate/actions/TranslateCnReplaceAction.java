@@ -36,7 +36,7 @@ public class TranslateCnReplaceAction extends EditorAction {
                 newText = String.format(Constants.JS_FORMART, model.getCode());
                 break;
               case ".html":
-                newText = String.format(Constants.HTML_FORMART, model.getCode());
+                newText = String.format(Constants.HTML_CN_FORMART, model.getCn());
                 break;
               default:
                 break;
