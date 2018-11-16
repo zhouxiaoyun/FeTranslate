@@ -54,22 +54,15 @@ public class TranslateCnReplaceAction extends EditorAction {
                     editType, message);
                 translateForm.setVisible(true);
               } catch (Exception e) {
-                JOptionPane.showMessageDialog(null, e.getMessage(), "FE企业运营管理平台",JOptionPane.ERROR_MESSAGE);
+                PluginUtil.handleError(editor, e.getMessage());
               }
             });
           }
         } catch (Exception e) {
-          e.printStackTrace();
+          PluginUtil.handleError(editor, e.getMessage());
         }
       }
 
-      @Override
-      public void handleError(Editor editor, String errMessage) {
-        Application app = ApplicationManager.getApplication();
-        app.invokeLater(() -> {
-          JOptionPane.showMessageDialog(null, errMessage, "FE企业运营管理平台",JOptionPane.ERROR_MESSAGE);
-        });
-      }
     }));
   }
 }

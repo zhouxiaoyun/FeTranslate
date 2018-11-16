@@ -7,11 +7,12 @@
   <description><![CDATA[
       本插件用于FE企业运营平台多语言翻译插件<br/><br/>
       注意：<br/>
-      本插件需要连接FE数据库，数据库配置文件的位置为properties/jdbc.properties，如果没有本文件，需要建立此文件才可正常使用<br/>
+      本插件需要连接FE数据库，数据库配置文件的位置为properties/jdbc.properties，如果没有本文件，需要建立此文件才可正常使用<br/><br/>
 
       使用方法：<br/>
-      1、选择待翻译项，按住快捷键【ctrl + F1】，如果待翻译项在数据库中没有记录，则会出现翻译结果确认窗口，确认后，需要再次按住快捷键【ctrl + F1】替换代码，快捷键可以自定义，方法点击[File]-[Settings]-[Keymap]<br/>
-      2、如果需要翻译HTML及JSP中的JS，按住快捷键【ctrl + F2】<br/>
+      1、选择待翻译项，按住快捷键[ctrl + F1]，如果待翻译项在数据库中没有记录，则会出现翻译结果确认窗口，确认后，需要再次按住快捷键[ctrl + F1]替换代码，快捷键可以自定义，方法点击[File]-[Settings]-[Keymap]<br/>
+      2、如果需要翻译HTML及JSP中的JS，按住快捷键[ctrl + F2]<br/>
+      3、如果要查看翻译的结果，需要选择翻译块的代码<br/><br/>
     ]]></description>
 
   <change-notes><![CDATA[
@@ -39,6 +40,7 @@
       <add-to-group group-id="EditMenu" anchor="last"/>
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl F2"/>
     </action>
+
   </actions>
 
 </idea-plugin>
