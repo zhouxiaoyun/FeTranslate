@@ -47,16 +47,16 @@ public class TranslateCnHandler extends EditorWriteActionHandler {
           if (matherResult.isMatch()) {
             editType = 2;
             model = dbUtil.findByMessage(matherResult.getMatchGroupOne());
-            if (model == null && selectedText.length() == 32) { // 防止jsp中的js代码
+            if (model == null) { // 防止jsp中的js代码
               model = dbUtil.findByCode(matherResult.getMatchGroupOne());
             }
             if (model == null) {
-              PluginUtil.handleError(editor, "翻译条目已不存在！");
+              PluginUtil.handleError(editor, matherResult.getMatchGroupOne() + ", 翻译条目已不存在！");
               return;
             }
           } else {
             model = dbUtil.findByMessage(selectedText);
-            if (model == null && selectedText.length() == 32) {
+            if (model == null) {
               model = dbUtil.findByCode(selectedText);
             }
           }
