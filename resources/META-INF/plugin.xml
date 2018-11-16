@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>com.zhkeen.flyrise.fe.translate</id>
   <name>FeTranslate</name>
-  <version>1.0</version>
+  <version>1.1.0</version>
   <vendor email="support@zhkeen.cn" url="http://github.com/FeTranslate">珠海敏锐信息技术有限公司</vendor>
 
   <description><![CDATA[
