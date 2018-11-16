@@ -1,8 +1,5 @@
 package com.zhkeen.flyrise.fe.translate.model;
 
-import java.sql.Date;
-import java.util.Map;
-
 /**
  * 翻译模型
  */

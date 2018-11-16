@@ -2,27 +2,20 @@ package com.zhkeen.flyrise.fe.translate.actions;
 
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.editor.CaretModel;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorModificationUtil;
 import com.intellij.openapi.editor.SelectionModel;
 import com.intellij.openapi.editor.actionSystem.EditorAction;
-import com.intellij.openapi.ui.MessageType;
-import com.intellij.openapi.ui.popup.Balloon;
-import com.intellij.openapi.ui.popup.BalloonBuilder;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
-import com.intellij.ui.awt.RelativePoint;
 import com.zhkeen.flyrise.fe.translate.form.TranslateForm;
 import com.zhkeen.flyrise.fe.translate.model.TranslateResultModel;
 import com.zhkeen.flyrise.fe.translate.utils.Constants;
 import com.zhkeen.flyrise.fe.translate.utils.PluginUtil;
-import java.awt.Point;
 import javax.swing.JOptionPane;
 
-public class TranslateReplaceAction extends EditorAction {
+public class TranslateJsInHtmlOrJspCnReplaceAction extends EditorAction {
 
-  public TranslateReplaceAction() {
-    super(new TranslateHandler(new ActionHandler() {
+  public TranslateJsInHtmlOrJspCnReplaceAction() {
+    super(new TranslateCnHandler(new ActionHandler() {
       @Override
       public void handleResult(Editor editor, PluginUtil pluginUtil, TranslateResultModel model,
           String fileType, int editType, String message) {
@@ -31,23 +24,7 @@ public class TranslateReplaceAction extends EditorAction {
           final int selectionStart = selectionModel.getSelectionStart();
 
           if (editType == 1 && model != null) {
-            String newText = "";
-            switch (fileType) {
-              case ".java":
-                newText = String.format(Constants.JAVA_FORMART, model.getCode());
-                break;
-              case ".jsp":
-                newText = String.format(Constants.JSP_FORMART, model.getCode());
-                break;
-              case ".js":
-                newText = String.format(Constants.JS_FORMART, model.getCode());
-                break;
-              case ".html":
-                newText = String.format(Constants.HTML_FORMART, model.getCode());
-                break;
-              default:
-                break;
-            }
+            String newText = String.format(Constants.JS_FORMART, model.getCode());
             if (newText.length() > 0) {
               EditorModificationUtil.deleteSelectedText(editor);
               EditorModificationUtil.insertStringAtCaret(editor, newText);
@@ -61,17 +38,7 @@ public class TranslateReplaceAction extends EditorAction {
                     editType, message);
                 translateForm.setVisible(true);
               } catch (Exception e) {
-
                 JOptionPane.showMessageDialog(null, e.getMessage(), "FE企业运营管理平台",JOptionPane.ERROR_MESSAGE);
-//                BalloonBuilder builder =
-//                    JBPopupFactory.getInstance()
-//                        .createHtmlTextBalloonBuilder("FE企业运营管理平台", MessageType.ERROR, null);
-//                Balloon balloon = builder.createBalloon();
-//                balloon.setTitle(e.getMessage());
-//                CaretModel caretModel = editor.getCaretModel();
-//                Point point = editor.visualPositionToXY(caretModel.getVisualPosition());
-//                RelativePoint where = new RelativePoint(point);
-//                balloon.show(where, Balloon.Position.below);
               }
             });
           }
@@ -85,15 +52,6 @@ public class TranslateReplaceAction extends EditorAction {
         Application app = ApplicationManager.getApplication();
         app.invokeLater(() -> {
           JOptionPane.showMessageDialog(null, errMessage, "FE企业运营管理平台",JOptionPane.ERROR_MESSAGE);
-//          BalloonBuilder builder =
-//              JBPopupFactory.getInstance()
-//                  .createHtmlTextBalloonBuilder("FE企业运营管理平台", MessageType.ERROR, null);
-//          Balloon balloon = builder.createBalloon();
-//          balloon.setTitle(errMessage);
-//          CaretModel caretModel = editor.getCaretModel();
-//          Point point = editor.visualPositionToXY(caretModel.getVisualPosition());
-//          RelativePoint where = new RelativePoint(point);
-//          balloon.show(where, Balloon.Position.below);
         });
       }
     }));

@@ -13,6 +13,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * 多语言翻译处理
+ */
 public class TranslateCnHandler extends EditorWriteActionHandler {
 
   private PluginUtil pluginUtil;
@@ -57,6 +60,9 @@ public class TranslateCnHandler extends EditorWriteActionHandler {
             editType = 2;
             if (".java".equals(fileType) || ".jsp".equals(fileType)) {
               model = dbUtil.findByMessage(matcher.group(1));
+              if (model == null) { // 防止jsp中的js代码
+                model = dbUtil.findByCode(matcher.group(1));
+              }
             } else {
               model = dbUtil.findByCode(matcher.group(1));
             }
@@ -66,6 +72,9 @@ public class TranslateCnHandler extends EditorWriteActionHandler {
             }
           } else {
             model = dbUtil.findByMessage(selectedText);
+            if (model == null) {
+              model = dbUtil.findByCode(matcher.group(1));
+            }
           }
 
           mHandler.handleResult(editor, pluginUtil, model, fileType, editType, message);
@@ -76,6 +85,11 @@ public class TranslateCnHandler extends EditorWriteActionHandler {
     }
   }
 
+  /**
+   * 截断字符串头部及尾部的单引号及双引号
+   * @param text 字符串
+   * @return 字符串
+   */
   private String trimText(String text) {
     int len = text.length();
     int st = 0;

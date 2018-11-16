@@ -54,17 +54,7 @@ public class TranslateCnReplaceAction extends EditorAction {
                     editType, message);
                 translateForm.setVisible(true);
               } catch (Exception e) {
-
                 JOptionPane.showMessageDialog(null, e.getMessage(), "FE企业运营管理平台",JOptionPane.ERROR_MESSAGE);
-//                BalloonBuilder builder =
-//                    JBPopupFactory.getInstance()
-//                        .createHtmlTextBalloonBuilder("FE企业运营管理平台", MessageType.ERROR, null);
-//                Balloon balloon = builder.createBalloon();
-//                balloon.setTitle(e.getMessage());
-//                CaretModel caretModel = editor.getCaretModel();
-//                Point point = editor.visualPositionToXY(caretModel.getVisualPosition());
-//                RelativePoint where = new RelativePoint(point);
-//                balloon.show(where, Balloon.Position.below);
               }
             });
           }
@@ -78,15 +68,6 @@ public class TranslateCnReplaceAction extends EditorAction {
         Application app = ApplicationManager.getApplication();
         app.invokeLater(() -> {
           JOptionPane.showMessageDialog(null, errMessage, "FE企业运营管理平台",JOptionPane.ERROR_MESSAGE);
-//          BalloonBuilder builder =
-//              JBPopupFactory.getInstance()
-//                  .createHtmlTextBalloonBuilder("FE企业运营管理平台", MessageType.ERROR, null);
-//          Balloon balloon = builder.createBalloon();
-//          balloon.setTitle(errMessage);
-//          CaretModel caretModel = editor.getCaretModel();
-//          Point point = editor.visualPositionToXY(caretModel.getVisualPosition());
-//          RelativePoint where = new RelativePoint(point);
-//          balloon.show(where, Balloon.Position.below);
         });
       }
     }));

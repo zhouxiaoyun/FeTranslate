@@ -194,6 +194,9 @@ public class TranslateForm extends JDialog implements ActionListener {
         JComponent.WHEN_IN_FOCUSED_WINDOW);
   }
 
+  /**
+   * 将Form居中显示
+   */
   private void setLocationToCenter() {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     Dimension frameSize = this.getSize();

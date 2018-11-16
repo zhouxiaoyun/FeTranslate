@@ -2,7 +2,6 @@ package com.zhkeen.flyrise.fe.translate.utils;
 
 import com.intellij.openapi.vfs.VirtualFile;
 import com.zhkeen.flyrise.fe.translate.model.JdbcConnectionModel;
-import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -2,28 +2,27 @@
   <id>com.zhkeen.flyrise.fe.translate</id>
   <name>FeTranslate</name>
   <version>1.0</version>
-  <vendor email="support@zh-keen.com" url="http://github.com/FeTranslate">珠海敏锐信息技术有限公司</vendor>
+  <vendor email="support@zhkeen.cn" url="http://github.com/FeTranslate">珠海敏锐信息技术有限公司</vendor>
 
   <description><![CDATA[
-      本插件用于FE企业运营平台多语言翻译插件<br/>
+      本插件用于FE企业运营平台多语言翻译插件<br/><br/>
+      注意：<br/>
+      本插件需要连接FE数据库，数据库配置文件的位置为properties/jdbc.properties，如果没有本文件，需要建立此文件才可正常使用<br/>
+
+      使用方法：<br/>
+      1、选择待翻译项，按住快捷键【ctrl + F1】，如果待翻译项在数据库中没有记录，则会出现翻译结果确认窗口，确认后，需要再次按住快捷键【ctrl + F1】替换代码，快捷键可以自定义，方法点击[File]-[Settings]-[Keymap]<br/>
+      2、如果需要翻译HTML及JSP中的JS，按住快捷键【ctrl + F2】<br/>
     ]]></description>
 
   <change-notes><![CDATA[
-      1.0.0 第一个发布版本
+      1.0.0 第一个发布版本<br/>
+      1.1.0 增加HTML及JSP中JS的处理<br/>
     ]]>
   </change-notes>
 
-  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
   <idea-version since-build="145.0"/>
 
-  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-       on how to target different products -->
-  <!-- uncomment to enable plugin in all products
-  <depends>com.intellij.modules.lang</depends>
-  -->
-
   <extensions defaultExtensionNs="com.intellij">
-    <!-- Add your extensions here -->
   </extensions>
 
   <actions>
@@ -33,9 +32,10 @@
       <add-to-group group-id="EditMenu" anchor="last"/>
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl F1"/>
     </action>
-    <action id="com.zhkeen.flyrise.fe.translate.actions.TranslateRevertAction"
-      class="com.zhkeen.flyrise.fe.translate.actions.TranslateRevertAction" text="TranslateRevert"
-      description="翻译-还原">
+
+    <action id="com.zhkeen.flyrise.fe.translate.actions.TranslateJsInHtmlOrJspCnReplaceAction"
+      class="com.zhkeen.flyrise.fe.translate.actions.TranslateJsInHtmlOrJspCnReplaceAction" text="Translate Js In Html Or Jsp"
+      description="翻译Html或Jsp中的Js">
       <add-to-group group-id="EditMenu" anchor="last"/>
       <keyboard-shortcut keymap="$default" first-keystroke="ctrl F2"/>
     </action>

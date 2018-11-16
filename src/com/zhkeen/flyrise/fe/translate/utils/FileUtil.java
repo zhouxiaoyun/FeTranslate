@@ -1,12 +1,9 @@
 package com.zhkeen.flyrise.fe.translate.utils;
 
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.zhkeen.flyrise.fe.translate.model.JdbcConnectionModel;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Properties;
 import org.apache.commons.lang.StringUtils;
 
@@ -43,7 +40,7 @@ public class FileUtil {
         model.setJdbcPassword(jdbcPassword);
 
         return model;
-      }else {
+      } else {
         throw new ConfigurationException("数据库配置文件错误！");
       }
     } else {
