@@ -56,9 +56,6 @@ public class TranslateCnHandler extends EditorWriteActionHandler {
             }
           } else {
             model = dbUtil.findByMessage(selectedText);
-            if (model == null) {
-              model = dbUtil.findByCode(selectedText);
-            }
           }
 
           mHandler.handleResult(editor, pluginUtil, model, fileType, editType, selectedText);
