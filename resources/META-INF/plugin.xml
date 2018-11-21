@@ -2,22 +2,21 @@
   <id>com.zhkeen.flyrise.fe.translate</id>
   <name>FeTranslate</name>
   <version>1.1.0</version>
-  <vendor email="support@zhkeen.cn" url="http://github.com/FeTranslate">珠海敏锐信息技术有限公司</vendor>
+  <vendor email="support@zhkeen.cn" url="http://github.com/FeTranslate">Zhuhai acumen information technology co. LTD</vendor>
 
   <description><![CDATA[
-      本插件用于FE企业运营平台多语言翻译插件<br/><br/>
-      注意：<br/>
-      本插件需要连接FE数据库，数据库配置文件的位置为properties/jdbc.properties，如果没有本文件，需要建立此文件才可正常使用<br/><br/>
-
-      使用方法：<br/>
-      1、选择待翻译项，按住快捷键[ctrl + F1]，如果待翻译项在数据库中没有记录，则会出现翻译结果确认窗口，确认后，需要再次按住快捷键[ctrl + F1]替换代码，快捷键可以自定义，方法点击[File]-[Settings]-[Keymap]<br/>
-      2、如果需要翻译HTML及JSP中的JS，按住快捷键[ctrl + F2]<br/>
-      3、如果要查看翻译的结果，需要选择翻译块的代码<br/><br/>
+      This plug-in is used for multilingual translation of FE enterprise operating platform<br/><br/>
+      Note: <br/><br/>
+      This plugin needs to connect FE database, the database configuration file location for the properties/JDBC properties, without this document, need to build this file can only be normal use <br/> <br/>
+      Usage:<br/><br/>
+      1. Select the item to be translated and press the shortcut key [CTRL + F1]. If the item to be translated is not recorded in the database, a translation result confirmation window will appear<br/>
+      2. If you need to translate JS in HTML and JSP, press the shortcut key [CTRL + F2]<br/>
+      3. If you want to view the translation results, you need to select the code of the translation block<br/><br/>
     ]]></description>
 
   <change-notes><![CDATA[
-      1.0.0 第一个发布版本<br/>
-      1.1.0 增加HTML及JSP中JS的处理<br/>
+      1.0.0 The first release<br/>
+      1.1.0 Add JS processing in HTML and JSPS<br/>
     ]]>
   </change-notes>
 
