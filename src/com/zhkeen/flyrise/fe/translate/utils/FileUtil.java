@@ -10,8 +10,8 @@ import org.apache.commons.lang.StringUtils;
 public class FileUtil {
 
   public static boolean existsFeProjectFile(VirtualFile baseDir) {
-    if (baseDir != null && baseDir.findFileByRelativePath(Constants.JDBC_PORPERTIES_FILE)
-        .exists()) {
+    if (baseDir != null && (baseDir.findFileByRelativePath(Constants.JDBC_PORPERTIES_FILE)
+        .exists() || baseDir.findFileByRelativePath(Constants.JDBC_PORPERTIES_FILE2).exists())) {
       return true;
     } else {
       return false;
@@ -22,6 +22,10 @@ public class FileUtil {
       throws IOException, ConfigurationException {
     VirtualFile propertiesFile = baseDir
         .findFileByRelativePath(Constants.JDBC_PORPERTIES_FILE);
+    if (!propertiesFile.exists()) {
+      propertiesFile = baseDir
+          .findFileByRelativePath(Constants.JDBC_PORPERTIES_FILE2);
+    }
     if (propertiesFile.exists()) {
       Properties properties = new Properties();
       properties.load(propertiesFile.getInputStream());
