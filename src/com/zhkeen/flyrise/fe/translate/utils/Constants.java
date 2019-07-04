@@ -28,8 +28,8 @@ public class Constants {
   /**
    * JDBC配置文件的路径（相对项目工程
    */
-  public static final String JDBC_PORPERTIES_FILE = "properties/jdbc.properties";
-  public static final String JDBC_PORPERTIES_FILE2 = "src/main/resources/jdbc.properties";
+  public static final String JDBC_PORPERTIES_FILE = "src/main/resources/jdbc.properties";
+  public static final String JDBC_PORPERTIES_FILE2 = "properties/jdbc.properties";
 
   /**
    * java匹配规则，用于提取多语言部分

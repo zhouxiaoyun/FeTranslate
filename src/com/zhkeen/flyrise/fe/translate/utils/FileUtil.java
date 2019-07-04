@@ -11,7 +11,7 @@ public class FileUtil {
 
   public static boolean existsFeProjectFile(VirtualFile baseDir) {
     if (baseDir != null && (baseDir.findFileByRelativePath(Constants.JDBC_PORPERTIES_FILE)
-        .exists() || baseDir.findFileByRelativePath(Constants.JDBC_PORPERTIES_FILE2).exists())) {
+        != null || baseDir.findFileByRelativePath(Constants.JDBC_PORPERTIES_FILE2) != null)) {
       return true;
     } else {
       return false;
@@ -22,7 +22,7 @@ public class FileUtil {
       throws IOException, ConfigurationException {
     VirtualFile propertiesFile = baseDir
         .findFileByRelativePath(Constants.JDBC_PORPERTIES_FILE);
-    if (!propertiesFile.exists()) {
+    if (propertiesFile == null) {
       propertiesFile = baseDir
           .findFileByRelativePath(Constants.JDBC_PORPERTIES_FILE2);
     }
