@@ -9,6 +9,7 @@ public class JdbcConnectionModel {
   private String jdbcUrl;
   private String jdbcUser;
   private String jdbcPassword;
+  private int dbType;
 
   public String getDriverName() {
     return driverName;
@@ -40,5 +41,13 @@ public class JdbcConnectionModel {
 
   public void setJdbcPassword(String jdbcPassword) {
     this.jdbcPassword = jdbcPassword;
+  }
+
+  public int getDbType() {
+    return dbType;
+  }
+
+  public void setDbType(int dbType) {
+    this.dbType = dbType;
   }
 }

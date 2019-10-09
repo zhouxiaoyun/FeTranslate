@@ -5,6 +5,7 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.zhkeen.flyrise.fe.translate.model.JdbcConnectionModel;
+import java.util.List;
 import javax.swing.JOptionPane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +25,8 @@ public class PluginUtil {
       } else {
         needMultiLanguage = false;
       }
-      JdbcConnectionModel jdbcConnectionModel = FileUtil.readJdbcConnectionModel(baseDir);
-      this.dbUtil = new DbUtil(jdbcConnectionModel);
+      List<JdbcConnectionModel> models = FileUtil.readJdbcConnectionModel(baseDir);
+      this.dbUtil = new DbUtil(models);
       this.transApi = new TransApi("20180503000153011", "_MRqRxWs1i75bfvXg4kU");
     } catch (Exception e) {
       needMultiLanguage = false;

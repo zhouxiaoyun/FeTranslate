@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,115 +17,131 @@ public class DbUtil {
 
   private static final String TABLE_TRANSLATE = "TRANSLATE";
 
-  private JdbcConnectionModel model;
+  private List<JdbcConnectionModel> models;
 
-  public DbUtil(JdbcConnectionModel model) {
-    this.model = model;
+  public DbUtil(List<JdbcConnectionModel> models) {
+    this.models = models;
   }
 
-  private Connection getConnection() throws SQLException, ClassNotFoundException {
+  private Connection getConnection(JdbcConnectionModel model)
+      throws SQLException, ClassNotFoundException {
     Class.forName(model.getDriverName());
-    Connection connection = DriverManager
+    return DriverManager
         .getConnection(model.getJdbcUrl(), model.getJdbcUser(), model.getJdbcPassword());
-    return connection;
+  }
+
+  private String getTableName(int dbType) {
+    if (dbType == 3) {
+      return "`" + TABLE_TRANSLATE + "`";
+    }
+    return TABLE_TRANSLATE;
   }
 
   public TranslateResultModel findByMessage(String message)
       throws SQLException, ClassNotFoundException {
 
-    String selectSql = String
-        .format("SELECT ID,CODE,CN,TW,US,UPDATETIME,UNITCODE,USERID FROM %s WHERE CN = ?",
-            TABLE_TRANSLATE);
-    Connection connection = getConnection();
-    PreparedStatement pstmt = connection.prepareStatement(selectSql);
-    pstmt.setString(1, message);
-    ResultSet rs = pstmt.executeQuery();
-    TranslateResultModel model = buildResultModel(rs);
-    connection.close();
+    String selectSql = "SELECT ID,CODE,CN,TW,US,UPDATETIME,UNITCODE,USERID FROM %s WHERE CN = ?";
+    TranslateResultModel model = null;
+    String tableName;
+    for (JdbcConnectionModel jdbcConnectionModel : models) {
+      Connection connection = getConnection(jdbcConnectionModel);
+      PreparedStatement pstmt = connection.prepareStatement(
+          String.format(selectSql, getTableName(jdbcConnectionModel.getDbType())));
+      pstmt.setString(1, message);
+      ResultSet rs = pstmt.executeQuery();
+      model = buildResultModel(rs);
+      connection.close();
+    }
     return model;
   }
 
   public TranslateResultModel findByCode(String code) throws SQLException, ClassNotFoundException {
-    String selectSql = String
-        .format("SELECT ID,CODE,CN,TW,US,UPDATETIME,UNITCODE,USERID FROM %s WHERE CODE = ?",
-            TABLE_TRANSLATE);
+    String selectSql = "SELECT ID,CODE,CN,TW,US,UPDATETIME,UNITCODE,USERID FROM %s WHERE CODE = ?";
     logger.debug(selectSql);
-    Connection connection = getConnection();
-    PreparedStatement pstmt = connection.prepareStatement(selectSql);
-    pstmt.setString(1, code);
-    ResultSet rs = pstmt.executeQuery();
-    TranslateResultModel model = buildResultModel(rs);
-    connection.close();
+    TranslateResultModel model = null;
+    for (JdbcConnectionModel jdbcConnectionModel : models) {
+      Connection connection = getConnection(jdbcConnectionModel);
+      PreparedStatement pstmt = connection.prepareStatement(
+          String.format(selectSql, getTableName(jdbcConnectionModel.getDbType())));
+      pstmt.setString(1, code);
+      ResultSet rs = pstmt.executeQuery();
+      model = buildResultModel(rs);
+      connection.close();
+    }
     return model;
   }
 
   public void insertTranslate(TranslateResultModel model)
       throws SQLException, ClassNotFoundException {
-    String selectSql = String
-        .format("SELECT ID FROM %s WHERE CODE = ? OR CN = ?", TABLE_TRANSLATE);
-    Connection connection = getConnection();
-    PreparedStatement pstmt = connection.prepareStatement(selectSql);
-    pstmt.setString(1, model.getCode());
-    pstmt.setString(2, model.getCn());
+    String selectSql = "SELECT ID FROM %s WHERE CODE = ? OR CN = ?";
+    for (JdbcConnectionModel jdbcConnectionModel : models) {
+      Connection connection = getConnection(jdbcConnectionModel);
+      PreparedStatement pstmt = connection.prepareStatement(
+          String.format(selectSql, getTableName(jdbcConnectionModel.getDbType())));
+      pstmt.setString(1, model.getCode());
+      pstmt.setString(2, model.getCn());
 
-    ResultSet rs = pstmt.executeQuery();
-    if (rs.next()) {
-      throw new SQLException("已经存在相同的编码[CODE]或者条目[CN]!");
-    } else {
-      int maxId = 1;
-      String maxIdSql = String.format("SELECT MAX(ID) AS MAXID FROM %s", TABLE_TRANSLATE);
-      PreparedStatement pstmtMaxId = connection.prepareStatement(maxIdSql);
-      ResultSet rsMaxId = pstmtMaxId.executeQuery();
-      if (rsMaxId.next()) {
-        maxId = rsMaxId.getInt("MAXID") + 1;
+      ResultSet rs = pstmt.executeQuery();
+      if (rs.next()) {
+        throw new SQLException("已经存在相同的编码[CODE]或者条目[CN]!");
+      } else {
+        int maxId = 1;
+        String maxIdSql = String.format("SELECT MAX(ID) AS MAXID FROM %s", getTableName(jdbcConnectionModel.getDbType()));
+        PreparedStatement pstmtMaxId = connection.prepareStatement(maxIdSql);
+        ResultSet rsMaxId = pstmtMaxId.executeQuery();
+        if (rsMaxId.next()) {
+          maxId = rsMaxId.getInt("MAXID") + 1;
+        }
+        String insertSql = String
+            .format(
+                "INSERT INTO %s(ID,CODE,CN,TW,US,UPDATETIME,UNITCODE,USERID) VALUES(?,?,?,?,?,?,?,?)",
+                getTableName(jdbcConnectionModel.getDbType()));
+        PreparedStatement pstmtInsert = connection.prepareStatement(insertSql);
+        pstmtInsert.setInt(1, maxId);
+        pstmtInsert.setString(2, model.getCode());
+        pstmtInsert.setString(3, model.getCn());
+        pstmtInsert.setString(4, model.getTw());
+        pstmtInsert.setString(5, model.getUs());
+        pstmtInsert.setString(6, model.getUpdateTime());
+        pstmtInsert.setString(7, model.getUnitCode());
+        pstmtInsert.setString(8, model.getUserId());
+        pstmtInsert.executeUpdate();
       }
-      String insertSql = String
-          .format(
-              "INSERT INTO %s(ID,CODE,CN,TW,US,UPDATETIME,UNITCODE,USERID) VALUES(?,?,?,?,?,?,?,?)",
-              TABLE_TRANSLATE);
-      PreparedStatement pstmtInsert = connection.prepareStatement(insertSql);
-      pstmtInsert.setInt(1, maxId);
-      pstmtInsert.setString(2, model.getCode());
-      pstmtInsert.setString(3, model.getCn());
-      pstmtInsert.setString(4, model.getTw());
-      pstmtInsert.setString(5, model.getUs());
-      pstmtInsert.setString(6, model.getUpdateTime());
-      pstmtInsert.setString(7, model.getUnitCode());
-      pstmtInsert.setString(8, model.getUserId());
-      pstmtInsert.executeUpdate();
+      connection.close();
     }
-    connection.close();
   }
 
   public void updateTranslate(TranslateResultModel model)
       throws SQLException, ClassNotFoundException {
+    for (JdbcConnectionModel jdbcConnectionModel : models) {
+      Connection connection = getConnection(jdbcConnectionModel);
+      String selectSql = String
+          .format("SELECT ID FROM %s WHERE (CODE = ? OR CN = ?) AND ID <> ?", getTableName(jdbcConnectionModel.getDbType()));
+      PreparedStatement pstmt = connection.prepareStatement(selectSql);
+      pstmt.setString(1, model.getCode());
+      pstmt.setString(2, model.getCn());
+      pstmt.setInt(3, model.getId());
 
-    Connection connection = getConnection();
-    String selectSql = String
-        .format("SELECT ID FROM %s WHERE (CODE = ? OR CN = ?) AND ID <> ?", TABLE_TRANSLATE);
-    PreparedStatement pstmt = connection.prepareStatement(selectSql);
-    pstmt.setString(1, model.getCode());
-    pstmt.setString(2, model.getCn());
-    pstmt.setInt(3, model.getId());
-
-    ResultSet rs = pstmt.executeQuery();
-    if (rs.next()) {
-      throw new SQLException("已经存在相同的编码[CODE]或者条目[CN]!");
-    } else {
-      String insertSql = String
-          .format(
-              "UPDATE %s SET CODE = ?, CN = ?, TW = ?, US = ?, UPDATETIME = ?, UNITCODE = ?, USERID = ? WHERE ID = ?", TABLE_TRANSLATE);
-      PreparedStatement pstmtUpdate = connection.prepareStatement(insertSql);
-      pstmtUpdate.setString(1, model.getCode());
-      pstmtUpdate.setString(2, model.getCn());
-      pstmtUpdate.setString(3, model.getTw());
-      pstmtUpdate.setString(4, model.getUs());
-      pstmtUpdate.setString(5, model.getUpdateTime());
-      pstmtUpdate.setString(6, model.getUnitCode());
-      pstmtUpdate.setString(7, model.getUserId());
-      pstmtUpdate.setInt(8, model.getId());
-      pstmtUpdate.executeUpdate();
-      connection.close();
+      ResultSet rs = pstmt.executeQuery();
+      if (rs.next()) {
+        throw new SQLException("已经存在相同的编码[CODE]或者条目[CN]!");
+      } else {
+        String insertSql = String
+            .format(
+                "UPDATE %s SET CODE = ?, CN = ?, TW = ?, US = ?, UPDATETIME = ?, UNITCODE = ?, USERID = ? WHERE ID = ?",
+                getTableName(jdbcConnectionModel.getDbType()));
+        PreparedStatement pstmtUpdate = connection.prepareStatement(insertSql);
+        pstmtUpdate.setString(1, model.getCode());
+        pstmtUpdate.setString(2, model.getCn());
+        pstmtUpdate.setString(3, model.getTw());
+        pstmtUpdate.setString(4, model.getUs());
+        pstmtUpdate.setString(5, model.getUpdateTime());
+        pstmtUpdate.setString(6, model.getUnitCode());
+        pstmtUpdate.setString(7, model.getUserId());
+        pstmtUpdate.setInt(8, model.getId());
+        pstmtUpdate.executeUpdate();
+        connection.close();
+      }
     }
   }
 
